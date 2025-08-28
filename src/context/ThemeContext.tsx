@@ -13,7 +13,10 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
       if (saved) {
         return saved === 'dark';
       }
-      return window.matchMedia('(prefers-color-scheme: dark)').matches;
+      if (window.matchMedia) {
+        return window.matchMedia('(prefers-color-scheme: dark)').matches;
+      }
+      return false;
     }
     return false; // Default to light mode
   });
