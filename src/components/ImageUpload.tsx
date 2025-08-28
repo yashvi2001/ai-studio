@@ -268,7 +268,7 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
         >
           {isProcessing ? (
             <div className="flex flex-col items-center gap-3">
-              <div 
+              <div
                 className="w-8 h-8 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"
                 role="status"
                 aria-label="Processing image"
@@ -296,7 +296,10 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
                 <p className="text-gray-500 dark:text-gray-400">
                   Drag & drop or click to browse
                 </p>
-                <p id="upload-instructions" className="text-xs text-gray-400 dark:text-gray-500">
+                <p
+                  id="upload-instructions"
+                  className="text-xs text-gray-400 dark:text-gray-500"
+                >
                   PNG/JPG • Max 10MB • Auto-resize to 1920px
                 </p>
               </div>

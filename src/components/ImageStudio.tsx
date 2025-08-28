@@ -14,17 +14,26 @@ export const ImageStudio: React.FC = () => {
   const { state, updateState, addToHistory } = useAppState();
   const abortControllerRef = useRef<AbortController | null>(null);
 
-  const handleImageUpload = useCallback((imageData: ImageData | null) => {
-    updateState({ uploadedImage: imageData, error: null });
-  }, [updateState]);
+  const handleImageUpload = useCallback(
+    (imageData: ImageData | null) => {
+      updateState({ uploadedImage: imageData, error: null });
+    },
+    [updateState]
+  );
 
-  const handlePromptChange = useCallback((newPrompt: string) => {
-    updateState({ prompt: newPrompt });
-  }, [updateState]);
+  const handlePromptChange = useCallback(
+    (newPrompt: string) => {
+      updateState({ prompt: newPrompt });
+    },
+    [updateState]
+  );
 
-  const handleStyleChange = useCallback((newStyle: StyleType) => {
-    updateState({ selectedStyle: newStyle });
-  }, [updateState]);
+  const handleStyleChange = useCallback(
+    (newStyle: StyleType) => {
+      updateState({ selectedStyle: newStyle });
+    },
+    [updateState]
+  );
 
   const handleGenerate = useCallback(async () => {
     if (!state.uploadedImage || !state.prompt.trim()) {
@@ -32,10 +41,10 @@ export const ImageStudio: React.FC = () => {
       return;
     }
 
-    updateState({ 
-      isGenerating: true, 
-      error: null, 
-      retryCount: 0 
+    updateState({
+      isGenerating: true,
+      error: null,
+      retryCount: 0,
     });
 
     // Create abort controller for this request
@@ -44,7 +53,7 @@ export const ImageStudio: React.FC = () => {
     const attemptGenerate = async (attempt: number = 1): Promise<void> => {
       try {
         if (!state.uploadedImage) return;
-        
+
         const result = await mockGenerateAPI(
           {
             imageDataUrl: state.uploadedImage.dataUrl,
@@ -54,10 +63,10 @@ export const ImageStudio: React.FC = () => {
           abortControllerRef.current?.signal
         );
 
-        updateState({ 
-          currentGeneration: result, 
-          isGenerating: false, 
-          retryCount: 0 
+        updateState({
+          currentGeneration: result,
+          isGenerating: false,
+          retryCount: 0,
         });
         addToHistory(result);
       } catch (err) {
@@ -75,39 +84,49 @@ export const ImageStudio: React.FC = () => {
           const delay = Math.pow(2, attempt - 1) * 1000; // Exponential backoff
           setTimeout(() => attemptGenerate(attempt + 1), delay);
         } else {
-          updateState({ 
+          updateState({
             error: err instanceof Error ? err.message : 'Generation failed',
             isGenerating: false,
-            retryCount: 0
+            retryCount: 0,
           });
         }
       }
     };
 
     await attemptGenerate();
-  }, [state.uploadedImage, state.prompt, state.selectedStyle, updateState, addToHistory]);
+  }, [
+    state.uploadedImage,
+    state.prompt,
+    state.selectedStyle,
+    updateState,
+    addToHistory,
+  ]);
 
   const handleAbort = useCallback(() => {
     if (abortControllerRef.current) {
       abortControllerRef.current.abort();
       abortControllerRef.current = null;
     }
-    updateState({ 
-      isGenerating: false, 
-      retryCount: 0, 
-      error: null 
+    updateState({
+      isGenerating: false,
+      retryCount: 0,
+      error: null,
     });
   }, [updateState]);
 
-  const handleHistorySelect = useCallback((generation: Generation) => {
-    updateState({ 
-      currentGeneration: generation,
-      prompt: generation.prompt,
-      selectedStyle: generation.style
-    });
-  }, [updateState]);
+  const handleHistorySelect = useCallback(
+    (generation: Generation) => {
+      updateState({
+        currentGeneration: generation,
+        prompt: generation.prompt,
+        selectedStyle: generation.style,
+      });
+    },
+    [updateState]
+  );
 
-  const canGenerate = state.uploadedImage && state.prompt.trim() && !state.isGenerating;
+  const canGenerate =
+    state.uploadedImage && state.prompt.trim() && !state.isGenerating;
 
   return (
     <div
@@ -117,13 +136,16 @@ export const ImageStudio: React.FC = () => {
     >
       <div className="flex-1 flex overflow-hidden">
         {/* Left Panel - Controls */}
-        <aside 
+        <aside
           className="w-80 bg-gray-50 dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 flex flex-col p-6 space-y-6 overflow-y-auto"
           role="complementary"
           aria-label="Image generation controls"
         >
           <section className="space-y-4" aria-labelledby="upload-heading">
-            <h2 id="upload-heading" className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-3">
+            <h2
+              id="upload-heading"
+              className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-3"
+            >
               Upload Image
             </h2>
             <ImageUpload
@@ -133,7 +155,10 @@ export const ImageStudio: React.FC = () => {
           </section>
 
           <section className="space-y-4" aria-labelledby="prompt-heading">
-            <h2 id="prompt-heading" className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-3">
+            <h2
+              id="prompt-heading"
+              className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-3"
+            >
               Prompt & Style
             </h2>
             <PromptInput
@@ -149,7 +174,9 @@ export const ImageStudio: React.FC = () => {
           </section>
 
           <section className="space-y-4" aria-labelledby="generate-heading">
-            <h2 id="generate-heading" className="sr-only">Generate Image</h2>
+            <h2 id="generate-heading" className="sr-only">
+              Generate Image
+            </h2>
             <GenerateButton
               onClick={handleGenerate}
               onAbort={handleAbort}
@@ -189,7 +216,7 @@ export const ImageStudio: React.FC = () => {
             isGenerating={state.isGenerating}
             onAbort={handleAbort}
           />
-          
+
           <GenerationHistory
             history={state.history}
             onSelect={handleHistorySelect}

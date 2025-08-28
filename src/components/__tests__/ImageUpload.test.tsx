@@ -28,91 +28,139 @@ describe('ImageUpload', () => {
   });
 
   it('renders upload area when no image is selected', () => {
-    render(<ImageUpload onImageUpload={mockOnImageUpload} currentImage={null} />);
-    
+    render(
+      <ImageUpload onImageUpload={mockOnImageUpload} currentImage={null} />
+    );
+
     expect(screen.getByText('Upload an image')).toBeInTheDocument();
-    expect(screen.getByText('Drag & drop or click to browse')).toBeInTheDocument();
-    expect(screen.getByText('PNG/JPG • Max 10MB • Auto-resize to 1920px')).toBeInTheDocument();
+    expect(
+      screen.getByText('Drag & drop or click to browse')
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText('PNG/JPG • Max 10MB • Auto-resize to 1920px')
+    ).toBeInTheDocument();
   });
 
   it('renders current image when one is uploaded', () => {
-    render(<ImageUpload onImageUpload={mockOnImageUpload} currentImage={mockImageData} />);
-    
-    expect(screen.getByAltText(`Preview of uploaded image: ${mockImageData.name}`)).toBeInTheDocument();
+    render(
+      <ImageUpload
+        onImageUpload={mockOnImageUpload}
+        currentImage={mockImageData}
+      />
+    );
+
+    expect(
+      screen.getByAltText(`Preview of uploaded image: ${mockImageData.name}`)
+    ).toBeInTheDocument();
     expect(screen.getByText(mockImageData.name)).toBeInTheDocument();
     expect(screen.getByText('100 × 100')).toBeInTheDocument();
   });
 
   it('shows remove and replace buttons on image hover', async () => {
     const user = userEvent.setup();
-    render(<ImageUpload onImageUpload={mockOnImageUpload} currentImage={mockImageData} />);
-    
-    const imageContainer = screen.getByAltText(`Preview of uploaded image: ${mockImageData.name}`).parentElement;
+    render(
+      <ImageUpload
+        onImageUpload={mockOnImageUpload}
+        currentImage={mockImageData}
+      />
+    );
+
+    const imageContainer = screen.getByAltText(
+      `Preview of uploaded image: ${mockImageData.name}`
+    ).parentElement;
     await user.hover(imageContainer!);
-    
+
     expect(screen.getByLabelText('Remove image')).toBeInTheDocument();
     expect(screen.getByLabelText('Replace image')).toBeInTheDocument();
   });
 
   it('calls onImageUpload with null when remove button is clicked', async () => {
     const user = userEvent.setup();
-    render(<ImageUpload onImageUpload={mockOnImageUpload} currentImage={mockImageData} />);
-    
-    const imageContainer = screen.getByAltText(`Preview of uploaded image: ${mockImageData.name}`).parentElement;
+    render(
+      <ImageUpload
+        onImageUpload={mockOnImageUpload}
+        currentImage={mockImageData}
+      />
+    );
+
+    const imageContainer = screen.getByAltText(
+      `Preview of uploaded image: ${mockImageData.name}`
+    ).parentElement;
     await user.hover(imageContainer!);
-    
+
     const removeButton = screen.getByLabelText('Remove image');
     await user.click(removeButton);
-    
+
     expect(mockOnImageUpload).toHaveBeenCalledWith(null);
   });
 
   it('opens file dialog when upload area is clicked', async () => {
     const user = userEvent.setup();
-    render(<ImageUpload onImageUpload={mockOnImageUpload} currentImage={null} />);
-    
-    const uploadArea = screen.getByRole('button', { name: /upload image area/i });
+    render(
+      <ImageUpload onImageUpload={mockOnImageUpload} currentImage={null} />
+    );
+
+    const uploadArea = screen.getByRole('button', {
+      name: /upload image area/i,
+    });
     await user.click(uploadArea);
-    
+
     // Note: We can't actually test file dialog opening, but we can verify the click handler
     expect(uploadArea).toBeInTheDocument();
   });
 
   it('supports keyboard navigation for upload area', async () => {
     const user = userEvent.setup();
-    render(<ImageUpload onImageUpload={mockOnImageUpload} currentImage={null} />);
-    
-    const uploadArea = screen.getByRole('button', { name: /upload image area/i });
+    render(
+      <ImageUpload onImageUpload={mockOnImageUpload} currentImage={null} />
+    );
+
+    const uploadArea = screen.getByRole('button', {
+      name: /upload image area/i,
+    });
     uploadArea.focus();
-    
+
     await user.keyboard('{Enter}');
     // Should trigger file selection
-    
+
     await user.keyboard(' ');
     // Should also trigger file selection
   });
 
   it('shows processing state when image is being processed', () => {
-    render(<ImageUpload onImageUpload={mockOnImageUpload} currentImage={null} />);
-    
+    render(
+      <ImageUpload onImageUpload={mockOnImageUpload} currentImage={null} />
+    );
+
     // Simulate processing state by setting isProcessing to true
     // This would need to be implemented in the component
     expect(screen.getByText('Upload an image')).toBeInTheDocument();
   });
 
   it('displays error message when provided', () => {
-    render(<ImageUpload onImageUpload={mockOnImageUpload} currentImage={null} />);
-    
+    render(
+      <ImageUpload onImageUpload={mockOnImageUpload} currentImage={null} />
+    );
+
     // We'd need to trigger an error state to test this
     // For now, just verify the component renders without error
-    expect(screen.getByRole('button', { name: /upload image area/i })).toBeInTheDocument();
+    expect(
+      screen.getByRole('button', { name: /upload image area/i })
+    ).toBeInTheDocument();
   });
 
   it('has proper ARIA labels and roles', () => {
-    render(<ImageUpload onImageUpload={mockOnImageUpload} currentImage={null} />);
-    
-    const uploadArea = screen.getByRole('button', { name: /upload image area/i });
-    expect(uploadArea).toHaveAttribute('aria-describedby', 'upload-instructions');
+    render(
+      <ImageUpload onImageUpload={mockOnImageUpload} currentImage={null} />
+    );
+
+    const uploadArea = screen.getByRole('button', {
+      name: /upload image area/i,
+    });
+    expect(uploadArea).toHaveAttribute(
+      'aria-describedby',
+      'upload-instructions'
+    );
     expect(uploadArea).toHaveAttribute('tabIndex', '0');
   });
 
@@ -122,9 +170,14 @@ describe('ImageUpload', () => {
       originalSize: 2048,
       size: 1024,
     };
-    
-    render(<ImageUpload onImageUpload={mockOnImageUpload} currentImage={resizedImageData} />);
-    
+
+    render(
+      <ImageUpload
+        onImageUpload={mockOnImageUpload}
+        currentImage={resizedImageData}
+      />
+    );
+
     expect(screen.getByText('• Resized')).toBeInTheDocument();
   });
-}); 
+});

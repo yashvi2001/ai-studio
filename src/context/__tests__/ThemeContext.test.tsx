@@ -25,9 +25,7 @@ const TestComponent = () => {
   const { isDark, toggleTheme } = useTheme();
   return (
     <div>
-      <span data-testid="theme-status">
-        {isDark ? 'dark' : 'light'}
-      </span>
+      <span data-testid="theme-status">{isDark ? 'dark' : 'light'}</span>
       <button onClick={toggleTheme} data-testid="theme-toggle">
         Toggle Theme
       </button>
@@ -46,25 +44,25 @@ describe('ThemeContext', () => {
 
   it('provides default light theme', () => {
     localStorageMock.getItem.mockReturnValue(null);
-    
+
     render(
       <ThemeProvider>
         <TestComponent />
       </ThemeProvider>
     );
-    
+
     expect(screen.getByTestId('theme-status')).toHaveTextContent('light');
   });
 
   it('loads theme from localStorage on mount', () => {
     localStorageMock.getItem.mockReturnValue('dark');
-    
+
     render(
       <ThemeProvider>
         <TestComponent />
       </ThemeProvider>
     );
-    
+
     expect(screen.getByTestId('theme-status')).toHaveTextContent('dark');
     expect(document.documentElement).toHaveClass('dark');
   });
@@ -72,31 +70,34 @@ describe('ThemeContext', () => {
   it('toggles theme when toggleTheme is called', async () => {
     const user = userEvent.setup();
     localStorageMock.getItem.mockReturnValue('light');
-    
+
     render(
       <ThemeProvider>
         <TestComponent />
       </ThemeProvider>
     );
-    
+
     expect(screen.getByTestId('theme-status')).toHaveTextContent('light');
-    
+
     const toggleButton = screen.getByTestId('theme-toggle');
     await user.click(toggleButton);
-    
+
     expect(screen.getByTestId('theme-status')).toHaveTextContent('dark');
-    expect(localStorageMock.setItem).toHaveBeenCalledWith('ai-studio-theme', 'dark');
+    expect(localStorageMock.setItem).toHaveBeenCalledWith(
+      'ai-studio-theme',
+      'dark'
+    );
   });
 
   it('applies dark theme classes to HTML element', () => {
     localStorageMock.getItem.mockReturnValue('dark');
-    
+
     render(
       <ThemeProvider>
         <TestComponent />
       </ThemeProvider>
     );
-    
+
     expect(document.documentElement).toHaveClass('dark');
     expect(document.documentElement).toHaveAttribute('data-theme', 'dark');
     expect(document.body).toHaveAttribute('data-theme', 'dark');
@@ -104,13 +105,13 @@ describe('ThemeContext', () => {
 
   it('applies light theme classes to HTML element', () => {
     localStorageMock.getItem.mockReturnValue('light');
-    
+
     render(
       <ThemeProvider>
         <TestComponent />
       </ThemeProvider>
     );
-    
+
     expect(document.documentElement).not.toHaveClass('dark');
     expect(document.documentElement).toHaveAttribute('data-theme', 'light');
     expect(document.body).toHaveAttribute('data-theme', 'light');
@@ -119,28 +120,31 @@ describe('ThemeContext', () => {
   it('persists theme preference to localStorage', async () => {
     const user = userEvent.setup();
     localStorageMock.getItem.mockReturnValue('light');
-    
+
     render(
       <ThemeProvider>
         <TestComponent />
       </ThemeProvider>
     );
-    
+
     const toggleButton = screen.getByTestId('theme-toggle');
     await user.click(toggleButton);
-    
-    expect(localStorageMock.setItem).toHaveBeenCalledWith('ai-studio-theme', 'dark');
+
+    expect(localStorageMock.setItem).toHaveBeenCalledWith(
+      'ai-studio-theme',
+      'dark'
+    );
   });
 
   it('handles invalid localStorage values gracefully', () => {
     localStorageMock.getItem.mockReturnValue('invalid-theme');
-    
+
     render(
       <ThemeProvider>
         <TestComponent />
       </ThemeProvider>
     );
-    
+
     // Should default to light theme
     expect(screen.getByTestId('theme-status')).toHaveTextContent('light');
   });
@@ -148,21 +152,21 @@ describe('ThemeContext', () => {
   it('updates HTML attributes when theme changes', async () => {
     const user = userEvent.setup();
     localStorageMock.getItem.mockReturnValue('light');
-    
+
     render(
       <ThemeProvider>
         <TestComponent />
       </ThemeProvider>
     );
-    
+
     // Initial state
     expect(document.documentElement).not.toHaveClass('dark');
     expect(document.documentElement).toHaveAttribute('data-theme', 'light');
-    
+
     // Toggle to dark
     const toggleButton = screen.getByTestId('theme-toggle');
     await user.click(toggleButton);
-    
+
     // Updated state
     expect(document.documentElement).toHaveClass('dark');
     expect(document.documentElement).toHaveAttribute('data-theme', 'dark');
@@ -170,23 +174,23 @@ describe('ThemeContext', () => {
 
   it('provides consistent theme state across re-renders', () => {
     localStorageMock.getItem.mockReturnValue('dark');
-    
+
     const { rerender } = render(
       <ThemeProvider>
         <TestComponent />
       </ThemeProvider>
     );
-    
+
     expect(screen.getByTestId('theme-status')).toHaveTextContent('dark');
-    
+
     // Re-render the component
     rerender(
       <ThemeProvider>
         <TestComponent />
       </ThemeProvider>
     );
-    
+
     // Theme should remain the same
     expect(screen.getByTestId('theme-status')).toHaveTextContent('dark');
   });
-}); 
+});

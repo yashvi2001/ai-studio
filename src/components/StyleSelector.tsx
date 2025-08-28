@@ -93,7 +93,11 @@ export const StyleSelector: React.FC<StyleSelectorProps> = ({
           Choose a style
         </legend>
 
-        <div className="grid grid-cols-2 gap-3" role="radiogroup" aria-label="AI art style selection">
+        <div
+          className="grid grid-cols-2 gap-3"
+          role="radiogroup"
+          aria-label="AI art style selection"
+        >
           {styles.map((style) => (
             <label
               key={style.value}
@@ -113,17 +117,12 @@ export const StyleSelector: React.FC<StyleSelectorProps> = ({
                 className="sr-only"
                 aria-describedby={`style-${style.value}-desc`}
               />
-              <div 
-                className="text-2xl mb-2"
-                aria-hidden="true"
-              >
+              <div className="text-2xl mb-2" aria-hidden="true">
                 {style.icon}
               </div>
               <div className="text-center">
-                <span className="block text-sm font-medium">
-                  {style.label}
-                </span>
-                <span 
+                <span className="block text-sm font-medium">{style.label}</span>
+                <span
                   id={`style-${style.value}-desc`}
                   className="block text-xs text-gray-500 dark:text-gray-400 mt-1"
                 >

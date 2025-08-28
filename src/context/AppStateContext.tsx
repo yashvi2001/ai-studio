@@ -4,7 +4,7 @@ import { ImageData, Generation, StyleType } from '../types';
 interface AppState {
   // Image upload state
   uploadedImage: ImageData | null;
-  
+
   // Generation state
   prompt: string;
   selectedStyle: StyleType;
@@ -12,7 +12,7 @@ interface AppState {
   currentGeneration: Generation | null;
   retryCount: number;
   error: string | null;
-  
+
   // History state
   history: Generation[];
 }
@@ -37,13 +37,17 @@ const defaultState: AppState = {
   history: [],
 };
 
-export const AppStateContext = createContext<AppStateContextType | undefined>(undefined);
+export const AppStateContext = createContext<AppStateContextType | undefined>(
+  undefined
+);
 
 interface AppStateProviderProps {
   children: ReactNode;
 }
 
-export const AppStateProvider: React.FC<AppStateProviderProps> = ({ children }) => {
+export const AppStateProvider: React.FC<AppStateProviderProps> = ({
+  children,
+}) => {
   const [state, setState] = useState<AppState>(() => {
     // Load state from localStorage on mount
     if (typeof window !== 'undefined') {
@@ -67,7 +71,10 @@ export const AppStateProvider: React.FC<AppStateProviderProps> = ({ children }) 
       try {
         // Don't save isGenerating state to avoid getting stuck in loading state
         const stateToSave = { ...state, isGenerating: false };
-        localStorage.setItem('ai-studio-app-state', JSON.stringify(stateToSave));
+        localStorage.setItem(
+          'ai-studio-app-state',
+          JSON.stringify(stateToSave)
+        );
       } catch {
         // Silently handle localStorage errors
       }
@@ -81,7 +88,7 @@ export const AppStateProvider: React.FC<AppStateProviderProps> = ({ children }) 
         const savedHistory = localStorage.getItem('ai-studio-history');
         if (savedHistory) {
           const parsed = JSON.parse(savedHistory) as Generation[];
-          setState(prev => ({ ...prev, history: parsed }));
+          setState((prev) => ({ ...prev, history: parsed }));
         }
       } catch {
         // Silently handle localStorage errors
@@ -90,7 +97,7 @@ export const AppStateProvider: React.FC<AppStateProviderProps> = ({ children }) 
   }, [state.history.length]);
 
   const updateState = (updates: Partial<AppState>) => {
-    setState(prev => ({ ...prev, ...updates }));
+    setState((prev) => ({ ...prev, ...updates }));
   };
 
   const resetState = () => {
@@ -103,20 +110,20 @@ export const AppStateProvider: React.FC<AppStateProviderProps> = ({ children }) 
   };
 
   const clearHistory = () => {
-    setState(prev => ({ ...prev, history: [] }));
+    setState((prev) => ({ ...prev, history: [] }));
   };
 
   const addToHistory = (generation: Generation) => {
-    setState(prev => {
+    setState((prev) => {
       const newHistory = [generation, ...prev.history.slice(0, 4)]; // Keep only last 5
       return { ...prev, history: newHistory };
     });
   };
 
   const removeFromHistory = (id: string) => {
-    setState(prev => ({
+    setState((prev) => ({
       ...prev,
-      history: prev.history.filter(g => g.id !== id)
+      history: prev.history.filter((g) => g.id !== id),
     }));
   };
 
@@ -134,4 +141,4 @@ export const AppStateProvider: React.FC<AppStateProviderProps> = ({ children }) 
       {children}
     </AppStateContext.Provider>
   );
-}; 
+};
