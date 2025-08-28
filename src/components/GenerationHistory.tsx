@@ -45,8 +45,8 @@ export const GenerationHistory: React.FC<GenerationHistoryProps> = ({
 
   if (history.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center p-6 text-gray-400 dark:text-gray-500">
-        <svg width="48" height="48" viewBox="0 0 24 24" fill="currentColor">
+      <div className="flex flex-col items-center justify-center p-4 text-gray-400 dark:text-gray-500">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor">
           <path d="M13,3A9,9 0 0,0 4,12H1L4.89,15.89L4.96,16.03L9,12H6A7,7 0 0,1 13,5A7,7 0 0,1 20,12A7,7 0 0,1 13,19C11.07,19 9.32,18.21 8.06,16.94L6.64,18.36C8.27,20 10.5,21 13,21A9,9 0 0,0 22,12A9,9 0 0,0 13,3Z" />
         </svg>
         <p className="mt-2 text-sm font-medium">No generations yet</p>
@@ -58,8 +58,8 @@ export const GenerationHistory: React.FC<GenerationHistoryProps> = ({
   }
 
   return (
-    <div className="space-y-1">
-      <div className="space-y-1" role="list">
+    <div className="space-y-2">
+      <div className="space-y-1 max-h-48 overflow-y-auto custom-scrollbar" role="list">
         {history.map((generation) => (
           <div
             key={generation.id}
@@ -78,16 +78,16 @@ export const GenerationHistory: React.FC<GenerationHistoryProps> = ({
               <img
                 src={generation.imageUrl}
                 alt={`Generated: ${generation.prompt.slice(0, 30)}...`}
-                className="w-16 h-16 object-cover rounded-lg"
+                className="w-12 h-12 sm:w-16 sm:h-16 object-cover rounded-lg"
               />
               {currentId === generation.id && (
                 <div
-                  className="absolute -top-1 -right-1 w-5 h-5 bg-blue-600 rounded-full flex items-center justify-center"
+                  className="absolute -top-1 -right-1 w-4 h-4 sm:w-5 sm:h-5 bg-blue-600 rounded-full flex items-center justify-center"
                   aria-hidden="true"
                 >
                   <svg
-                    width="12"
-                    height="12"
+                    width="10"
+                    height="10"
                     viewBox="0 0 24 24"
                     fill="currentColor"
                     className="text-white"
@@ -99,14 +99,14 @@ export const GenerationHistory: React.FC<GenerationHistoryProps> = ({
             </div>
 
             <div className="flex-1 min-w-0">
-              <p className="text-sm text-gray-900 dark:text-gray-100 truncate">
-                {generation.prompt.length > 60
-                  ? `${generation.prompt.slice(0, 60)}...`
+              <p className="text-xs sm:text-sm text-gray-900 dark:text-gray-100 truncate">
+                {generation.prompt.length > 50
+                  ? `${generation.prompt.slice(0, 50)}...`
                   : generation.prompt}
               </p>
 
               <div className="flex items-center gap-2 mt-1 text-xs text-gray-500 dark:text-gray-400">
-                <span className="bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded">
+                <span className="bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded text-xs">
                   {formatStyle(generation.style)}
                 </span>
                 <span>•</span>
@@ -116,7 +116,7 @@ export const GenerationHistory: React.FC<GenerationHistoryProps> = ({
 
             <div className="flex-shrink-0">
               <button
-                className="p-2 text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded transition-colors"
+                className="p-1.5 sm:p-2 text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded transition-colors"
                 onClick={(e) => {
                   e.stopPropagation();
                   const link = document.createElement('a');
@@ -128,8 +128,8 @@ export const GenerationHistory: React.FC<GenerationHistoryProps> = ({
                 title="Download"
               >
                 <svg
-                  width="16"
-                  height="16"
+                  width="14"
+                  height="14"
                   viewBox="0 0 24 24"
                   fill="currentColor"
                 >
@@ -141,7 +141,7 @@ export const GenerationHistory: React.FC<GenerationHistoryProps> = ({
         ))}
       </div>
 
-      <div className="pt-3 border-t border-gray-200 dark:border-gray-700">
+      <div className="pt-2 border-t border-gray-200 dark:border-gray-700">
         <p className="text-xs text-gray-500 dark:text-gray-400 text-center">
           Showing {history.length} of 5 recent generations
         </p>

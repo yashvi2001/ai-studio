@@ -6,7 +6,7 @@ export const Layout: React.FC = () => {
   const { isDark, toggleTheme } = useTheme();
 
   return (
-    <div className="min-h-screen bg-white dark:bg-gray-900 transition-colors duration-200">
+    <div className="h-screen bg-white dark:bg-gray-900 transition-colors duration-200 flex flex-col overflow-hidden">
       {/* Skip to main content link for screen readers */}
       <a
         href="#main-content"
@@ -17,18 +17,18 @@ export const Layout: React.FC = () => {
 
       {/* Header */}
       <header
-        className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 px-6 py-4"
+        className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 px-4 sm:px-6 py-3 sm:py-4 flex-shrink-0"
         role="banner"
       >
-        <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-4">
-            <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
+        <div className="flex items-center justify-between max-w-7xl mx-auto">
+          <div className="flex items-center space-x-3 sm:space-x-4">
+            <h1 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-gray-100">
               AI Studio
             </h1>
           </div>
 
           <nav
-            className="flex items-center space-x-4"
+            className="flex items-center space-x-3 sm:space-x-4"
             role="navigation"
             aria-label="Main navigation"
           >
@@ -43,7 +43,7 @@ export const Layout: React.FC = () => {
             >
               {isDark ? (
                 <svg
-                  className="w-5 h-5"
+                  className="w-4 h-4 sm:w-5 sm:h-5"
                   fill="currentColor"
                   viewBox="0 0 20 20"
                   aria-hidden="true"
@@ -56,7 +56,7 @@ export const Layout: React.FC = () => {
                 </svg>
               ) : (
                 <svg
-                  className="w-5 h-5"
+                  className="w-4 h-4 sm:w-5 sm:h-5"
                   fill="currentColor"
                   viewBox="0 0 20 20"
                   aria-hidden="true"
@@ -72,7 +72,7 @@ export const Layout: React.FC = () => {
       {/* Main Content */}
       <main
         id="main-content"
-        className="flex-1 flex overflow-hidden"
+        className="flex-1 flex overflow-hidden min-h-0"
         role="main"
         aria-label="AI Image Studio main content"
       >

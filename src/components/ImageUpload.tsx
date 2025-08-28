@@ -116,7 +116,7 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
             <img
               src={currentImage.dataUrl}
               alt={`Preview of uploaded image: ${currentImage.name}`}
-              className="w-full h-48 object-cover rounded-lg"
+              className="w-full h-32 sm:h-40 lg:h-48 object-cover rounded-lg"
             />
             <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center gap-2">
               <button
@@ -177,7 +177,7 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
         </div>
       ) : (
         <div
-          className={`relative border-2 border-dashed rounded-lg p-8 text-center cursor-pointer transition-all duration-200 ${
+          className={`relative border-2 border-dashed rounded-lg p-6 sm:p-8 text-center cursor-pointer transition-all duration-200 ${
             isDragOver
               ? 'border-blue-600 bg-blue-50 dark:bg-blue-900/20 scale-105'
               : 'border-gray-300 dark:border-gray-600 hover:border-blue-500 dark:hover:border-blue-400 hover:bg-gray-50 dark:hover:bg-gray-800'
@@ -206,8 +206,8 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
           ) : (
             <div className="flex flex-col items-center gap-3">
               <svg
-                width="48"
-                height="48"
+                width="40"
+                height="40"
                 viewBox="0 0 24 24"
                 fill="currentColor"
                 className="text-gray-400 dark:text-gray-500"
@@ -216,10 +216,10 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
                 <path d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20Z" />
               </svg>
               <div className="space-y-1">
-                <p className="text-lg font-medium text-gray-900 dark:text-gray-100">
+                <p className="text-base sm:text-lg font-medium text-gray-900 dark:text-gray-100">
                   {isDragOver ? 'Drop your image here' : 'Upload an image'}
                 </p>
-                <p className="text-gray-500 dark:text-gray-400">
+                <p className="text-sm text-gray-500 dark:text-gray-400">
                   Drag & drop or click to browse
                 </p>
                 <p
