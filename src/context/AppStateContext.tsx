@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import React, { createContext, useState, useEffect, ReactNode } from 'react';
 import { ImageData, Generation, StyleType } from '../types';
 
 interface AppState {
@@ -37,7 +37,7 @@ const defaultState: AppState = {
   history: [],
 };
 
-const AppStateContext = createContext<AppStateContextType | undefined>(undefined);
+export const AppStateContext = createContext<AppStateContextType | undefined>(undefined);
 
 interface AppStateProviderProps {
   children: ReactNode;
@@ -54,8 +54,8 @@ export const AppStateProvider: React.FC<AppStateProviderProps> = ({ children }) 
           // Merge with defaults to handle missing properties
           return { ...defaultState, ...parsed };
         }
-      } catch (e) {
-        console.error('Failed to load app state:', e);
+      } catch {
+        // Silently handle localStorage errors
       }
     }
     return defaultState;
@@ -68,8 +68,8 @@ export const AppStateProvider: React.FC<AppStateProviderProps> = ({ children }) 
         // Don't save isGenerating state to avoid getting stuck in loading state
         const stateToSave = { ...state, isGenerating: false };
         localStorage.setItem('ai-studio-app-state', JSON.stringify(stateToSave));
-      } catch (e) {
-        console.error('Failed to save app state:', e);
+      } catch {
+        // Silently handle localStorage errors
       }
     }
   }, [state]);
@@ -83,11 +83,11 @@ export const AppStateProvider: React.FC<AppStateProviderProps> = ({ children }) 
           const parsed = JSON.parse(savedHistory) as Generation[];
           setState(prev => ({ ...prev, history: parsed }));
         }
-      } catch (e) {
-        console.error('Failed to load history:', e);
+      } catch {
+        // Silently handle localStorage errors
       }
     }
-  }, []);
+  }, [state.history.length]);
 
   const updateState = (updates: Partial<AppState>) => {
     setState(prev => ({ ...prev, ...updates }));
@@ -134,12 +134,4 @@ export const AppStateProvider: React.FC<AppStateProviderProps> = ({ children }) 
       {children}
     </AppStateContext.Provider>
   );
-};
-
-export const useAppState = (): AppStateContextType => {
-  const context = useContext(AppStateContext);
-  if (context === undefined) {
-    throw new Error('useAppState must be used within an AppStateProvider');
-  }
-  return context;
 }; 

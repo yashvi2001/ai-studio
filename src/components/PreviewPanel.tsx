@@ -1,9 +1,10 @@
 import React from 'react';
-import { useAppState } from '../context/AppStateContext';
+import { useAppState } from '../hooks/useAppState';
+import { ImageData, Generation } from '../types';
 
 interface PreviewPanelProps {
-  uploadedImage: any;
-  currentGeneration: any;
+  uploadedImage: ImageData | null;
+  currentGeneration: Generation | null;
   isGenerating: boolean;
   onAbort: () => void;
 }
@@ -12,7 +13,6 @@ export const PreviewPanel: React.FC<PreviewPanelProps> = ({
   uploadedImage,
   currentGeneration,
   isGenerating,
-  onAbort,
 }) => {
   const { state } = useAppState();
 
@@ -65,6 +65,7 @@ export const PreviewPanel: React.FC<PreviewPanelProps> = ({
                     height="20"
                     viewBox="0 0 24 24"
                     fill="currentColor"
+                    aria-hidden="true"
                   >
                     <path d="M5,20H19V18H5M19,9H15V3H9V9H5L12,16L19,9Z" />
                   </svg>
@@ -106,7 +107,7 @@ export const PreviewPanel: React.FC<PreviewPanelProps> = ({
                       {uploadedImage.name}
                     </p>
                     {uploadedImage.dimensions && (
-                      <p className="text-sm text-gray-500 dark:text-gray-400">
+                      <p className="text-xs text-gray-500 dark:text-gray-400">
                         {uploadedImage.dimensions.width} ×{' '}
                         {uploadedImage.dimensions.height}
                       </p>
@@ -120,6 +121,7 @@ export const PreviewPanel: React.FC<PreviewPanelProps> = ({
                     height="48"
                     viewBox="0 0 24 24"
                     fill="currentColor"
+                    aria-hidden="true"
                   >
                     <path d="M9,3V4H4V6H5V19A2,2 0 0,0 7,21H17A2,2 0 0,0 19,19V6H20V4H15V3H9M7,6H17V19H7V6M9,8V17H11V8H9M13,8V17H15V8H13Z" />
                   </svg>
@@ -149,6 +151,7 @@ export const PreviewPanel: React.FC<PreviewPanelProps> = ({
                     height="48"
                     viewBox="0 0 24 24"
                     fill="currentColor"
+                    aria-hidden="true"
                   >
                     <path d="M14,3V5H17.59L7.76,14.83L9.17,16.24L19,6.41V10H21V3M19,19H5V5H12V3H5C3.89,3 3,3.9 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V12H19V19Z" />
                   </svg>
@@ -162,7 +165,7 @@ export const PreviewPanel: React.FC<PreviewPanelProps> = ({
                 Style
               </h3>
               <div className="inline-block">
-                <span className="bg-blue-100 dark:bg-blue-900/20 text-blue-800 dark:text-blue-200 px-3 py-1 rounded-full text-sm font-medium">
+                <span className="bg-blue-100 dark:bg-blue-900/20 text-blue-800 dark:text-blue-200 px-2 py-1 rounded-full text-sm font-medium">
                   {formatStyle(state.selectedStyle)}
                 </span>
               </div>
@@ -176,6 +179,7 @@ export const PreviewPanel: React.FC<PreviewPanelProps> = ({
                   viewBox="0 0 24 24"
                   fill="currentColor"
                   className="text-green-600 dark:text-green-400"
+                  aria-hidden="true"
                 >
                   <path d="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M11,16.5L6.5,12L7.91,10.59L11,13.67L16.59,8.09L18,9.5L11,16.5Z" />
                 </svg>

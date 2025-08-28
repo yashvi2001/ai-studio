@@ -77,6 +77,15 @@ export const StyleSelector: React.FC<StyleSelectorProps> = ({
   onChange,
   disabled = false,
 }) => {
+  const handleKeyDown = (event: React.KeyboardEvent, styleValue: StyleType) => {
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
+      if (!disabled) {
+        onChange(styleValue);
+      }
+    }
+  };
+
   return (
     <div className="space-y-3">
       <fieldset disabled={disabled} className="space-y-3">
@@ -84,7 +93,7 @@ export const StyleSelector: React.FC<StyleSelectorProps> = ({
           Choose a style
         </legend>
 
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-2 gap-3" role="radiogroup" aria-label="AI art style selection">
           {styles.map((style) => (
             <label
               key={style.value}
@@ -92,52 +101,47 @@ export const StyleSelector: React.FC<StyleSelectorProps> = ({
                 value === style.value
                   ? 'border-blue-600 bg-blue-50 dark:bg-blue-900/20 text-blue-900 dark:text-blue-100'
                   : 'border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 hover:border-gray-300 dark:hover:border-gray-600'
-              } ${disabled ? 'opacity-50 cursor-not-allowed' : ''}`}
+              } ${disabled ? 'opacity-50 cursor-not-allowed' : ''} focus-within:ring-2 focus-within:ring-blue-500 focus-within:ring-offset-2 dark:focus-within:ring-offset-gray-900`}
             >
               <input
                 type="radio"
                 name="style"
                 value={style.value}
                 checked={value === style.value}
-                onChange={(e) => onChange(e.target.value as StyleType)}
-                className="sr-only"
+                onChange={() => onChange(style.value)}
                 disabled={disabled}
+                className="sr-only"
+                aria-describedby={`style-${style.value}-desc`}
               />
-
-              <div className="text-2xl mb-2">{style.icon}</div>
-              <div className="text-center">
-                <div className="font-medium text-sm">{style.label}</div>
-                <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                  {style.description}
-                </div>
+              <div 
+                className="text-2xl mb-2"
+                aria-hidden="true"
+              >
+                {style.icon}
               </div>
-
-              {value === style.value && (
-                <div className="absolute top-2 right-2 w-4 h-4 bg-blue-600 rounded-full flex items-center justify-center">
-                  <svg
-                    width="12"
-                    height="12"
-                    viewBox="0 0 24 24"
-                    fill="currentColor"
-                    className="text-white"
-                  >
-                    <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
-                  </svg>
-                </div>
-              )}
+              <div className="text-center">
+                <span className="block text-sm font-medium">
+                  {style.label}
+                </span>
+                <span 
+                  id={`style-${style.value}-desc`}
+                  className="block text-xs text-gray-500 dark:text-gray-400 mt-1"
+                >
+                  {style.description}
+                </span>
+              </div>
+              <div
+                tabIndex={disabled ? -1 : 0}
+                onKeyDown={(e) => handleKeyDown(e, style.value)}
+                className="absolute inset-0 rounded-lg focus:outline-none"
+                role="button"
+                aria-label={`Select ${style.label} style: ${style.description}`}
+                aria-pressed={value === style.value}
+              />
             </label>
           ))}
         </div>
       </fieldset>
-
-      <div className="flex items-center gap-2 text-gray-500 dark:text-gray-400">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" />
-        </svg>
-        <span className="text-xs">
-          Style affects the overall artistic direction of your generated image
-        </span>
-      </div>
     </div>
   );
 };
