@@ -105,40 +105,45 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
             img.src = result;
           }
         };
-
-        reader.onerror = () => {
-          setError('Failed to process image');
-          setIsProcessing(false);
-        };
-
         reader.readAsDataURL(processedFile);
       } catch {
-        setError('Failed to process image');
+        setError('Failed to process image. Please try again.');
         setIsProcessing(false);
       }
     },
     [onImageUpload]
   );
 
-  const handleDragOver = useCallback((e: React.DragEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    e.stopPropagation();
+  const handleFileSelect = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      const file = event.target.files?.[0];
+      if (file) {
+        processFile(file);
+      }
+      // Reset input value to allow selecting the same file again
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
+    },
+    [processFile]
+  );
+
+  const handleDragOver = useCallback((event: React.DragEvent) => {
+    event.preventDefault();
     setIsDragOver(true);
   }, []);
 
-  const handleDragLeave = useCallback((e: React.DragEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    e.stopPropagation();
+  const handleDragLeave = useCallback((event: React.DragEvent) => {
+    event.preventDefault();
     setIsDragOver(false);
   }, []);
 
   const handleDrop = useCallback(
-    (e: React.DragEvent<HTMLDivElement>) => {
-      e.preventDefault();
-      e.stopPropagation();
+    (event: React.DragEvent) => {
+      event.preventDefault();
       setIsDragOver(false);
 
-      const files = Array.from(e.dataTransfer.files);
+      const files = event.dataTransfer.files;
       if (files.length > 0 && files[0]) {
         processFile(files[0]);
       }
@@ -146,61 +151,51 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
     [processFile]
   );
 
-  const handleFileSelect = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      const files = e.target.files;
-      if (files && files.length > 0 && files[0]) {
-        processFile(files[0]);
-      }
-    },
-    [processFile]
-  );
-
   const handleClick = useCallback(() => {
-    fileInputRef.current?.click();
-  }, []);
+    if (!isProcessing && fileInputRef.current) {
+      fileInputRef.current.click();
+    }
+  }, [isProcessing]);
 
   const handleKeyDown = useCallback(
-    (e: React.KeyboardEvent<HTMLDivElement>) => {
-      if (e.key === 'Enter' || e.key === ' ') {
-        e.preventDefault();
+    (event: React.KeyboardEvent) => {
+      if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
         handleClick();
       }
     },
     [handleClick]
   );
 
-  const handleRemove = useCallback(
-    (e: React.MouseEvent<HTMLButtonElement>) => {
-      e.stopPropagation();
-      onImageUpload(null);
-    },
-    [onImageUpload]
-  );
+  const handleRemove = useCallback(() => {
+    onImageUpload(null);
+  }, [onImageUpload]);
 
   return (
-    <div className="w-full">
+    <div className="space-y-3">
+      {/* Hidden file input for accessibility */}
       <input
         ref={fileInputRef}
         type="file"
-        accept="image/png,image/jpg,image/jpeg"
+        accept="image/png,image/jpeg,image/jpg"
         onChange={handleFileSelect}
         className="hidden"
-        aria-label="Upload image file"
+        aria-label="Select image file"
+        disabled={isProcessing}
       />
 
       {currentImage ? (
-        <div className="space-y-3">
-          <div className="relative group rounded-lg overflow-hidden bg-gray-100 dark:bg-gray-800">
+        <div className="relative group">
+          <div className="relative">
             <img
               src={currentImage.dataUrl}
-              alt="Uploaded preview"
-              className="w-full h-48 object-cover"
+              alt={`Preview of uploaded image: ${currentImage.name}`}
+              className="w-full h-48 object-cover rounded-lg"
             />
             <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center gap-2">
               <button
                 onClick={handleRemove}
-                className="p-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors"
+                className="p-2 bg-red-600 text-white rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900 transition-colors"
                 aria-label="Remove image"
                 type="button"
               >
@@ -209,21 +204,24 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
                   height="20"
                   viewBox="0 0 24 24"
                   fill="currentColor"
+                  aria-hidden="true"
                 >
                   <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" />
                 </svg>
               </button>
               <button
                 onClick={handleClick}
-                className="p-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+                className="p-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900 transition-colors"
                 aria-label="Replace image"
                 type="button"
+                disabled={isProcessing}
               >
                 <svg
                   width="20"
                   height="20"
                   viewBox="0 0 24 24"
                   fill="currentColor"
+                  aria-hidden="true"
                 >
                   <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z" />
                 </svg>
@@ -266,10 +264,15 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
           tabIndex={0}
           role="button"
           aria-label="Upload image area. Click or drag and drop to upload."
+          aria-describedby="upload-instructions"
         >
           {isProcessing ? (
             <div className="flex flex-col items-center gap-3">
-              <div className="w-8 h-8 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+              <div 
+                className="w-8 h-8 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"
+                role="status"
+                aria-label="Processing image"
+              ></div>
               <p className="text-gray-500 dark:text-gray-400">
                 Processing image...
               </p>
@@ -282,6 +285,7 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
                 viewBox="0 0 24 24"
                 fill="currentColor"
                 className="text-gray-400 dark:text-gray-500"
+                aria-hidden="true"
               >
                 <path d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20Z" />
               </svg>
@@ -292,7 +296,7 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
                 <p className="text-gray-500 dark:text-gray-400">
                   Drag & drop or click to browse
                 </p>
-                <p className="text-xs text-gray-400 dark:text-gray-500">
+                <p id="upload-instructions" className="text-xs text-gray-400 dark:text-gray-500">
                   PNG/JPG • Max 10MB • Auto-resize to 1920px
                 </p>
               </div>
@@ -306,6 +310,7 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
           className="mt-3 flex items-center gap-2 p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-md text-red-700 dark:text-red-300 text-sm"
           role="alert"
           aria-live="polite"
+          aria-atomic="true"
         >
           <svg
             width="16"
@@ -313,10 +318,11 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
             viewBox="0 0 24 24"
             fill="currentColor"
             className="flex-shrink-0"
+            aria-hidden="true"
           >
             <path d="M12,2L13.09,8.26L22,9L13.09,9.74L12,16L10.91,9.74L2,9L10.91,8.26L12,2Z" />
           </svg>
-          {error}
+          <span id="error-message">{error}</span>
         </div>
       )}
     </div>

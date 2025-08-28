@@ -27,17 +27,9 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
       if (isDark) {
         htmlElement.classList.add('dark');
         htmlElement.setAttribute('data-theme', 'dark');
-        console.log(
-          '🌙 Dark mode enabled, classes:',
-          htmlElement.classList.toString()
-        );
       } else {
         htmlElement.classList.remove('dark');
         htmlElement.setAttribute('data-theme', 'light');
-        console.log(
-          '☀️ Light mode enabled, classes:',
-          htmlElement.classList.toString()
-        );
       }
 
       // Also set a data attribute for easier CSS targeting
@@ -52,22 +44,14 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
       if (isDark) {
         htmlElement.classList.add('dark');
         htmlElement.setAttribute('data-theme', 'dark');
-        console.log('🚀 Initial dark mode applied');
       } else {
         htmlElement.classList.remove('dark');
         htmlElement.setAttribute('data-theme', 'light');
-        console.log('🚀 Initial light mode applied');
       }
     }
-  }, []);
+  }, [isDark]);
 
   const toggleTheme = (): void => {
-    console.log(
-      '🔄 Toggling theme from',
-      isDark ? 'dark' : 'light',
-      'to',
-      !isDark ? 'dark' : 'light'
-    );
     setIsDark(!isDark);
   };
 

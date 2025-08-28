@@ -7,7 +7,7 @@ import { PreviewPanel } from './PreviewPanel';
 import { GenerationHistory } from './GenerationHistory';
 import { LoadingSpinner } from './LoadingSpinner';
 import { mockGenerateAPI } from '../services/mockAPI';
-import { useAppState } from '../context/AppStateContext';
+import { useAppState } from '../hooks/useAppState';
 import { ImageData, Generation, StyleType } from '../types';
 
 export const ImageStudio: React.FC = () => {
@@ -43,9 +43,11 @@ export const ImageStudio: React.FC = () => {
 
     const attemptGenerate = async (attempt: number = 1): Promise<void> => {
       try {
+        if (!state.uploadedImage) return;
+        
         const result = await mockGenerateAPI(
           {
-            imageDataUrl: state.uploadedImage!.dataUrl,
+            imageDataUrl: state.uploadedImage.dataUrl,
             prompt: state.prompt.trim(),
             style: state.selectedStyle,
           },
@@ -115,19 +117,23 @@ export const ImageStudio: React.FC = () => {
     >
       <div className="flex-1 flex overflow-hidden">
         {/* Left Panel - Controls */}
-        <div className="w-80 bg-gray-50 dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 flex flex-col p-6 space-y-6 overflow-y-auto">
-          <div className="space-y-4">
-            <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-3">
+        <aside 
+          className="w-80 bg-gray-50 dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 flex flex-col p-6 space-y-6 overflow-y-auto"
+          role="complementary"
+          aria-label="Image generation controls"
+        >
+          <section className="space-y-4" aria-labelledby="upload-heading">
+            <h2 id="upload-heading" className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-3">
               Upload Image
             </h2>
             <ImageUpload
               onImageUpload={handleImageUpload}
               currentImage={state.uploadedImage}
             />
-          </div>
+          </section>
 
-          <div className="space-y-4">
-            <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-3">
+          <section className="space-y-4" aria-labelledby="prompt-heading">
+            <h2 id="prompt-heading" className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-3">
               Prompt & Style
             </h2>
             <PromptInput
@@ -140,9 +146,10 @@ export const ImageStudio: React.FC = () => {
               onChange={handleStyleChange}
               disabled={state.isGenerating}
             />
-          </div>
+          </section>
 
-          <div className="space-y-4">
+          <section className="space-y-4" aria-labelledby="generate-heading">
+            <h2 id="generate-heading" className="sr-only">Generate Image</h2>
             <GenerateButton
               onClick={handleGenerate}
               onAbort={handleAbort}
@@ -156,6 +163,7 @@ export const ImageStudio: React.FC = () => {
                 className="flex items-center gap-2 p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-md text-red-700 dark:text-red-300 text-sm"
                 role="alert"
                 aria-live="polite"
+                aria-atomic="true"
               >
                 <svg
                   width="20"
@@ -163,14 +171,15 @@ export const ImageStudio: React.FC = () => {
                   viewBox="0 0 24 24"
                   fill="currentColor"
                   className="flex-shrink-0"
+                  aria-hidden="true"
                 >
                   <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" />
                 </svg>
-                {state.error}
+                <span id="error-message">{state.error}</span>
               </div>
             )}
-          </div>
-        </div>
+          </section>
+        </aside>
 
         {/* Right Panel - Preview & History */}
         <div className="flex-1 flex flex-col overflow-hidden">
