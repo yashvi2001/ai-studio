@@ -212,16 +212,20 @@ export const ImageStudio: React.FC = () => {
         <div className="flex-1 flex flex-col overflow-hidden">
           <PreviewPanel
             uploadedImage={state.uploadedImage}
+            prompt={state.prompt}
+            style={state.selectedStyle}
             currentGeneration={state.currentGeneration}
             isGenerating={state.isGenerating}
             onAbort={handleAbort}
           />
 
-          <GenerationHistory
-            history={state.history}
-            onSelect={handleHistorySelect}
-            currentGeneration={state.currentGeneration}
-          />
+          <div className="border-t border-gray-200 dark:border-gray-700 p-3">
+            <GenerationHistory
+              history={state.history}
+              onSelect={handleHistorySelect}
+              currentGeneration={state.currentGeneration}
+            />
+          </div>
         </div>
       </div>
 

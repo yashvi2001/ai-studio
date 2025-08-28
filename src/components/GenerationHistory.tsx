@@ -58,12 +58,12 @@ export const GenerationHistory: React.FC<GenerationHistoryProps> = ({
   }
 
   return (
-    <div className="space-y-3">
-      <div className="space-y-2" role="list">
+    <div className="space-y-1">
+      <div className="space-y-1" role="list">
         {history.map((generation) => (
           <div
             key={generation.id}
-            className={`flex items-center gap-3 p-3 rounded-lg cursor-pointer transition-all duration-200 hover:bg-gray-50 dark:hover:bg-gray-800 ${
+            className={`flex items-center gap-3 p-2 rounded-lg cursor-pointer transition-all duration-200 hover:bg-gray-50 dark:hover:bg-gray-800 ${
               currentId === generation.id
                 ? 'bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800'
                 : 'border border-transparent'
