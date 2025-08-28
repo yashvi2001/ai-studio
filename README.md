@@ -209,9 +209,3 @@ To add new artistic styles:
 ```bash
 npm run build
 ```
-
-### Deploy Options
-
-- **Static Hosting**: Netlify, Vercel, GitHub Pages
-- **CDN**: CloudFlare, AWS CloudFront
-- **Container**: Docker with nginx
