@@ -101,7 +101,7 @@ export const PreviewPanel: React.FC<PreviewPanelProps> = ({
                 {currentGeneration.prompt}
               </p>
               <div className="flex items-center justify-center gap-2 text-xs text-gray-500 dark:text-gray-400">
-                <span className="bg-blue-100 dark:bg-blue-900/20 text-blue-800 dark:text-blue-200 px-2 py-1 rounded">
+                <span className="bg-pink-100 dark:bg-pink-900/20 text-pink-800 dark:text-pink-200 px-2 py-1 rounded">
                   {formatStyle(currentGeneration.style)}
                 </span>
                 <span>•</span>
@@ -192,7 +192,7 @@ export const PreviewPanel: React.FC<PreviewPanelProps> = ({
                 Style
               </h3>
               <div className="inline-block">
-                <span className="bg-blue-100 dark:bg-blue-900/20 text-blue-800 dark:text-blue-200 px-2 py-1 rounded-full text-sm font-medium">
+                <span className="bg-pink-100 dark:bg-pink-900/20 text-pink-800 dark:text-pink-200 px-2 py-1 rounded-full text-sm font-medium">
                   {formatStyle(style)}
                 </span>
               </div>
@@ -223,7 +223,7 @@ export const PreviewPanel: React.FC<PreviewPanelProps> = ({
         <div className="p-4 border-t border-gray-200 dark:border-gray-700 flex-shrink-0">
           <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2 mb-2">
             <div
-              className="bg-blue-600 h-2 rounded-full animate-pulse"
+              className="bg-pink-600 h-2 rounded-full animate-pulse"
               style={{ width: '60%' }}
             ></div>
           </div>

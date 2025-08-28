@@ -1,5 +1,5 @@
 import React, { useState, useEffect, ReactNode } from 'react';
-import { ThemeContext, ThemeContextType } from './theme';
+import { ThemeContext, ThemeContextType, themeColors } from './theme';
 
 interface ThemeProviderProps {
   children: ReactNode;
@@ -61,6 +61,7 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
   const contextValue: ThemeContextType = {
     isDark,
     toggleTheme,
+    colors: themeColors,
   };
 
   return (

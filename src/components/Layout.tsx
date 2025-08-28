@@ -10,7 +10,7 @@ export const Layout: React.FC = () => {
       {/* Skip to main content link for screen readers */}
       <a
         href="#main-content"
-        className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-blue-600 text-white px-4 py-2 rounded-md z-50"
+        className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-gradient-to-r from-pink-500 to-purple-600 text-white px-4 py-2 rounded-md z-50"
       >
         Skip to main content
       </a>
@@ -22,7 +22,13 @@ export const Layout: React.FC = () => {
       >
         <div className="flex items-center justify-between max-w-7xl mx-auto">
           <div className="flex items-center space-x-3 sm:space-x-4">
-            <h1 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-gray-100">
+            {/* Modelia Logo */}
+            <img 
+              src="/modelia-logo.svg" 
+              alt="Modelia Logo" 
+              className="h-8 w-auto"
+            />
+            <h1 className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-pink-500 to-purple-600 bg-clip-text text-transparent">
               AI Studio
             </h1>
           </div>
@@ -35,7 +41,7 @@ export const Layout: React.FC = () => {
             {/* Theme Toggle */}
             <button
               onClick={toggleTheme}
-              className="p-2 rounded-lg bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900 transition-colors"
+              className="p-2 rounded-lg bg-gradient-to-r from-pink-100 to-purple-100 dark:from-pink-900 dark:to-purple-900 text-gray-600 dark:text-gray-300 hover:from-pink-200 hover:to-purple-200 dark:hover:from-pink-800 dark:hover:to-purple-800 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900 transition-all duration-200"
               aria-label={
                 isDark ? 'Switch to light mode' : 'Switch to dark mode'
               }

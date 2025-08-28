@@ -31,7 +31,7 @@ export const PromptInput: React.FC<PromptInputProps> = ({
         onChange={handleChange}
         disabled={disabled}
         placeholder={placeholder}
-        className="w-full h-20 sm:h-24 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none disabled:opacity-50 disabled:cursor-not-allowed text-sm sm:text-base"
+        className="w-full h-20 sm:h-24 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent resize-none disabled:opacity-50 disabled:cursor-not-allowed text-sm sm:text-base"
         aria-describedby="prompt-help"
       />
       <p id="prompt-help" className="text-xs text-gray-500 dark:text-gray-400">

@@ -49,6 +49,27 @@ html {
     sans-serif;
 }
 
+/* Modelia theme gradient utilities */
+.gradient-text {
+  @apply bg-gradient-to-r from-pink-500 to-purple-600 bg-clip-text text-transparent;
+}
+
+.gradient-bg {
+  @apply bg-gradient-to-r from-pink-500 to-purple-600;
+}
+
+.gradient-bg-light {
+  @apply bg-gradient-to-r from-pink-100 to-purple-100;
+}
+
+.gradient-bg-dark {
+  @apply bg-gradient-to-r from-pink-900 to-purple-900;
+}
+
+.gradient-border {
+  @apply border border-transparent bg-gradient-to-r from-pink-500 to-purple-600 bg-clip-border;
+}
+
 /* Dark mode overrides */
 .dark {
   color-scheme: dark;
@@ -139,7 +160,9 @@ html {
 .dropdown-enter-active {
   opacity: 1;
   transform: translateY(0) scale(1);
-  transition: opacity 200ms ease-out, transform 200ms ease-out;
+  transition:
+    opacity 200ms ease-out,
+    transform 200ms ease-out;
 }
 
 .dropdown-exit {
@@ -150,7 +173,9 @@ html {
 .dropdown-exit-active {
   opacity: 0;
   transform: translateY(10px) scale(0.95);
-  transition: opacity 150ms ease-in, transform 150ms ease-in;
+  transition:
+    opacity 150ms ease-in,
+    transform 150ms ease-in;
 }
 
 /* Enhanced button hover effects */
@@ -160,7 +185,9 @@ html {
 
 .btn-hover-lift:hover {
   transform: translateY(-2px);
-  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  box-shadow:
+    0 10px 25px -5px rgba(0, 0, 0, 0.1),
+    0 10px 10px -5px rgba(0, 0, 0, 0.04);
 }
 
 /* Dropdown backdrop blur effect */

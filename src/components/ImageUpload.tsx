@@ -137,7 +137,7 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
               </button>
               <button
                 onClick={handleClick}
-                className="p-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900 transition-colors"
+                className="p-2 bg-gradient-to-r from-pink-500 to-purple-600 text-white rounded-md hover:from-pink-600 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900 transition-colors"
                 aria-label="Replace image"
                 type="button"
                 disabled={processingState.isProcessing}
@@ -167,7 +167,7 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
                 </span>
               )}
               {currentImage.originalSize !== currentImage.size && (
-                <span className="text-blue-600 dark:text-blue-400">
+                <span className="text-pink-600 dark:text-pink-400">
                   {' '}
                   • Resized
                 </span>
@@ -179,9 +179,9 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
         <div
           className={`relative border-2 border-dashed rounded-lg p-6 sm:p-8 text-center cursor-pointer transition-all duration-200 ${
             isDragOver
-              ? 'border-blue-600 bg-blue-50 dark:bg-blue-900/20 scale-105'
-              : 'border-gray-300 dark:border-gray-600 hover:border-blue-500 dark:hover:border-blue-400 hover:bg-gray-50 dark:hover:bg-gray-800'
-          } ${processingState.isProcessing ? 'pointer-events-none opacity-50' : ''} focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900`}
+              ? 'border-pink-600 bg-pink-50 dark:bg-pink-900/20 scale-105'
+              : 'border-gray-300 dark:border-gray-600 hover:border-pink-500 dark:hover:border-pink-400 hover:bg-gray-50 dark:hover:bg-gray-800'
+          } ${processingState.isProcessing ? 'pointer-events-none opacity-50' : ''} focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900`}
           onDragOver={handleDragOver}
           onDragLeave={handleDragLeave}
           onDrop={handleDrop}
@@ -195,7 +195,7 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
           {processingState.isProcessing ? (
             <div className="flex flex-col items-center gap-3">
               <div
-                className="w-8 h-8 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"
+                className="w-8 h-8 border-2 border-pink-600 border-t-transparent rounded-full animate-spin"
                 role="status"
                 aria-label="Processing image"
               ></div>

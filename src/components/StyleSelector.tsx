@@ -83,7 +83,10 @@ export const StyleSelector: React.FC<StyleSelectorProps> = ({
   // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
         setIsDropdownOpen(false);
       }
     };
@@ -92,7 +95,7 @@ export const StyleSelector: React.FC<StyleSelectorProps> = ({
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  const selectedStyle = styles.find(style => style.value === value);
+  const selectedStyle = styles.find((style) => style.value === value);
 
   const handleKeyDown = (event: React.KeyboardEvent, styleValue: StyleType) => {
     if (event.key === 'Enter' || event.key === ' ') {
@@ -117,8 +120,10 @@ export const StyleSelector: React.FC<StyleSelectorProps> = ({
             type="button"
             onClick={() => !disabled && setIsDropdownOpen(!isDropdownOpen)}
             disabled={disabled}
-            className={`w-full flex items-center justify-between p-3 sm:p-4 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg text-left shadow-sm hover:border-blue-500 dark:hover:border-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 ${
-              disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer hover:shadow-md'
+            className={`w-full flex items-center justify-between p-3 sm:p-4 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg text-left shadow-sm hover:border-pink-500 dark:hover:border-pink-400 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent transition-all duration-200 ${
+              disabled
+                ? 'opacity-50 cursor-not-allowed'
+                : 'cursor-pointer hover:shadow-md'
             }`}
             aria-haspopup="listbox"
             aria-expanded={isDropdownOpen}
@@ -137,11 +142,11 @@ export const StyleSelector: React.FC<StyleSelectorProps> = ({
                 </div>
               </div>
             </div>
-            <svg 
-              width="20" 
-              height="20" 
-              className={`ml-2 flex-shrink-0 transition-transform duration-200 text-gray-400 ${isDropdownOpen ? 'rotate-180' : ''}`} 
-              viewBox="0 0 24 24" 
+            <svg
+              width="20"
+              height="20"
+              className={`ml-2 flex-shrink-0 transition-transform duration-200 text-gray-400 ${isDropdownOpen ? 'rotate-180' : ''}`}
+              viewBox="0 0 24 24"
               fill="currentColor"
               aria-hidden="true"
             >
@@ -163,14 +168,17 @@ export const StyleSelector: React.FC<StyleSelectorProps> = ({
                     onKeyDown={(e) => handleKeyDown(e, style.value)}
                     className={`w-full flex items-center gap-3 p-3 text-left rounded-md transition-all duration-200 ${
                       value === style.value
-                        ? 'bg-blue-50 dark:bg-blue-900/20 text-blue-900 dark:text-blue-100 border border-blue-200 dark:border-blue-800'
+                        ? 'bg-gradient-to-r from-pink-50 to-purple-50 dark:from-pink-900/20 dark:to-purple-900/20 text-pink-900 dark:text-pink-100 border border-pink-200 dark:border-pink-800'
                         : 'text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700/50 border border-transparent'
-                    } focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1`}
+                    } focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-offset-1`}
                     role="option"
                     aria-selected={value === style.value}
                     tabIndex={0}
                   >
-                    <div className="text-xl sm:text-2xl flex-shrink-0" aria-hidden="true">
+                    <div
+                      className="text-xl sm:text-2xl flex-shrink-0"
+                      aria-hidden="true"
+                    >
                       {style.icon}
                     </div>
                     <div className="flex-1 min-w-0">
@@ -185,7 +193,7 @@ export const StyleSelector: React.FC<StyleSelectorProps> = ({
                         height="16"
                         viewBox="0 0 24 24"
                         fill="currentColor"
-                        className="text-blue-600 dark:text-blue-400 flex-shrink-0"
+                        className="text-pink-600 dark:text-pink-400 flex-shrink-0"
                         aria-hidden="true"
                       >
                         <path d="M9,20.42L2.79,14.21L5.62,11.38L9,14.77L18.88,4.88L21.71,7.71L9,20.42Z" />
