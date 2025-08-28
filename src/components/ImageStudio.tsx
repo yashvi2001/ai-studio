@@ -112,7 +112,7 @@ export const ImageStudio: React.FC = () => {
   return (
     <div
       className="w-full h-full flex flex-col bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100"
-      role="main"
+      role="region"
       aria-label="AI Image Studio"
     >
       <div className="flex-1 flex overflow-hidden">
@@ -193,7 +193,7 @@ export const ImageStudio: React.FC = () => {
           <GenerationHistory
             history={state.history}
             onSelect={handleHistorySelect}
-            currentGeneration={state.currentGeneration}
+            currentId={state.currentGeneration?.id}
           />
         </div>
       </div>
