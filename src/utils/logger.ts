@@ -26,18 +26,21 @@ export const devLog = {
 
   error: (...args: unknown[]) => {
     if (isDevelopment) {
+      // eslint-disable-next-line no-console
       console.error(...args);
     }
   },
 
   group: (...args: unknown[]) => {
     if (isDevelopment) {
+      // eslint-disable-next-line no-console
       console.group(...args);
     }
   },
 
   groupEnd: () => {
     if (isDevelopment) {
+      // eslint-disable-next-line no-console
       console.groupEnd();
     }
   },
