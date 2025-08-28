@@ -18,9 +18,12 @@ export const ThemeProvider = ({ children }) => {
     if (typeof window !== 'undefined') {
       localStorage.setItem('ai-studio-theme', isDark ? 'dark' : 'light');
       document.documentElement.classList.toggle('dark', isDark);
-      
+
       // Also set a data attribute for easier CSS targeting
-      document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
+      document.documentElement.setAttribute(
+        'data-theme',
+        isDark ? 'dark' : 'light'
+      );
     }
   }, [isDark]);
 
@@ -33,4 +36,4 @@ export const ThemeProvider = ({ children }) => {
       {children}
     </ThemeContext.Provider>
   );
-}; 
+};

@@ -23,7 +23,7 @@ const UploadPreview = () => {
         // Calculate new dimensions
         if (width > MAX_WIDTH || height > MAX_HEIGHT) {
           const aspectRatio = width / height;
-          
+
           if (width > height) {
             width = MAX_WIDTH;
             height = width / aspectRatio;
@@ -38,7 +38,7 @@ const UploadPreview = () => {
 
         // Draw and resize
         ctx.drawImage(img, 0, 0, width, height);
-        
+
         canvas.toBlob(resolve, 'image/jpeg', 0.8);
       };
 
@@ -62,7 +62,7 @@ const UploadPreview = () => {
       }
 
       let processedFile = file;
-      
+
       // Resize if needed
       const img = new Image();
       await new Promise((resolve) => {
@@ -82,9 +82,8 @@ const UploadPreview = () => {
         originalSize: file.size,
         processedSize: processedFile.size,
         dimensions: { width: img.width, height: img.height },
-        name: file.name
+        name: file.name,
       });
-
     } catch (err) {
       setError(err.message);
     } finally {
@@ -126,11 +125,13 @@ const UploadPreview = () => {
     <div className="upload-preview">
       <div className="upload-header">
         <h2 className="upload-title">Upload & Preview</h2>
-        <p className="upload-subtitle">Upload a PNG/JPG image (≤10MB) for preview and processing</p>
+        <p className="upload-subtitle">
+          Upload a PNG/JPG image (≤10MB) for preview and processing
+        </p>
       </div>
 
       {!uploadedImage ? (
-        <div 
+        <div
           className={`upload-zone ${isProcessing ? 'processing' : ''}`}
           onDrop={handleDrop}
           onDragOver={(e) => e.preventDefault()}
@@ -144,7 +145,7 @@ const UploadPreview = () => {
             onChange={handleFileInput}
             style={{ display: 'none' }}
           />
-          
+
           {isProcessing ? (
             <div className="processing-state">
               <div className="spinner"></div>
@@ -153,17 +154,26 @@ const UploadPreview = () => {
           ) : (
             <div className="upload-content">
               <div className="upload-icon">
-                <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-                  <polyline points="7,10 12,15 17,10"/>
-                  <line x1="12" y1="15" x2="12" y2="3"/>
+                <svg
+                  width="64"
+                  height="64"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                >
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                  <polyline points="7,10 12,15 17,10" />
+                  <line x1="12" y1="15" x2="12" y2="3" />
                 </svg>
               </div>
               <h3 className="upload-title-text">Drop your image here</h3>
               <p className="upload-subtitle-text">or click to browse</p>
               <div className="file-specs">
                 <span className="file-spec">PNG, JPG up to 10MB</span>
-                <span className="file-spec">Auto-resize to ≤1920px if needed</span>
+                <span className="file-spec">
+                  Auto-resize to ≤1920px if needed
+                </span>
               </div>
             </div>
           )}
@@ -173,19 +183,26 @@ const UploadPreview = () => {
           <div className="preview-header">
             <h3 className="preview-title">Preview</h3>
             <button onClick={clearImage} className="clear-btn">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <line x1="18" y1="6" x2="6" y2="18"/>
-                <line x1="6" y1="6" x2="18" y2="18"/>
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
+                <line x1="18" y1="6" x2="6" y2="18" />
+                <line x1="6" y1="6" x2="18" y2="18" />
               </svg>
               <span>Clear</span>
             </button>
           </div>
-          
+
           <div className="preview-content">
             <div className="image-container">
-              <img 
-                src={uploadedImage.preview} 
-                alt="Preview" 
+              <img
+                src={uploadedImage.preview}
+                alt="Preview"
                 className="preview-image"
               />
             </div>
@@ -197,16 +214,23 @@ const UploadPreview = () => {
               </div>
               <div className="detail-item">
                 <span className="detail-label">Dimensions:</span>
-                <span className="detail-value">{uploadedImage.dimensions.width} × {uploadedImage.dimensions.height}px</span>
+                <span className="detail-value">
+                  {uploadedImage.dimensions.width} ×{' '}
+                  {uploadedImage.dimensions.height}px
+                </span>
               </div>
               <div className="detail-item">
                 <span className="detail-label">Original Size:</span>
-                <span className="detail-value">{formatFileSize(uploadedImage.originalSize)}</span>
+                <span className="detail-value">
+                  {formatFileSize(uploadedImage.originalSize)}
+                </span>
               </div>
               {uploadedImage.originalSize !== uploadedImage.processedSize && (
                 <div className="detail-item">
                   <span className="detail-label">Processed Size:</span>
-                  <span className="detail-value processed">{formatFileSize(uploadedImage.processedSize)}</span>
+                  <span className="detail-value processed">
+                    {formatFileSize(uploadedImage.processedSize)}
+                  </span>
                 </div>
               )}
             </div>
@@ -216,10 +240,18 @@ const UploadPreview = () => {
 
       {error && (
         <div className="error-message">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="error-icon">
-            <circle cx="12" cy="12" r="10"/>
-            <line x1="15" y1="9" x2="9" y2="15"/>
-            <line x1="9" y1="9" x2="15" y2="15"/>
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            className="error-icon"
+          >
+            <circle cx="12" cy="12" r="10" />
+            <line x1="15" y1="9" x2="9" y2="15" />
+            <line x1="9" y1="9" x2="15" y2="15" />
           </svg>
           <span className="error-text">{error}</span>
         </div>
@@ -228,4 +260,4 @@ const UploadPreview = () => {
   );
 };
 
-export default UploadPreview; 
+export default UploadPreview;
