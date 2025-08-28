@@ -1,73 +1,49 @@
-import React, { ReactNode } from 'react';
+import React from 'react';
 import { useTheme } from '../hooks/useTheme';
+import { ImageStudio } from './ImageStudio';
 
-interface LayoutProps {
-  children: ReactNode;
-}
-
-export const Layout: React.FC<LayoutProps> = ({ children }) => {
+export const Layout: React.FC = () => {
   const { isDark, toggleTheme } = useTheme();
 
-  // Debug logging
-  console.log('🎨 Layout component - isDark:', isDark);
-
   return (
-    <div className="w-screen h-screen flex flex-col bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 font-sans transition-colors duration-300">
+    <div className="min-h-screen bg-white dark:bg-gray-900 transition-colors duration-200">
       {/* Header */}
-      <header className="h-16 bg-gray-50 dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 flex items-center px-6 backdrop-blur-lg z-50 sticky top-0">
-        <div className="w-full flex justify-between items-center">
-          <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-            AI Studio
-          </h1>
-          <button
-            onClick={toggleTheme}
-            className="w-12 h-12 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-100 dark:bg-gray-700 hover:bg-blue-600 hover:text-white dark:hover:bg-blue-500 flex items-center justify-center cursor-pointer transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900"
-            aria-label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
-            title={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
-          >
-            <div className="flex items-center justify-center w-full h-full transition-all duration-300 hover:scale-110">
+      <header className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 px-6 py-4">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center space-x-4">
+            <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
+              AI Studio
+            </h1>
+          </div>
+          
+          <div className="flex items-center space-x-4">
+            {/* Theme Toggle */}
+            <button
+              onClick={toggleTheme}
+              className="p-2 rounded-lg bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
+              aria-label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
+            >
               {isDark ? (
-                // Sun icon for dark mode (switch to light)
-                <svg
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                  stroke="none"
-                  className="transition-all duration-300"
-                >
-                  <circle cx="12" cy="12" r="4" fill="currentColor" />
+                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
                   <path
-                    d="M12 1v3M12 20v3M4.22 4.22l2.12 2.12M17.66 17.66l2.12 2.12M1 12h3M20 12h3M4.22 19.78l2.12-2.12M17.66 6.34l2.12-2.12"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
+                    fillRule="evenodd"
+                    d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"
+                    clipRule="evenodd"
                   />
                 </svg>
               ) : (
-                // Moon icon for light mode (switch to dark)
-                <svg
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                  stroke="none"
-                  className="transition-all duration-300"
-                >
-                  <path
-                    d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"
-                    fill="currentColor"
-                  />
+                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" />
                 </svg>
               )}
-            </div>
-          </button>
+            </button>
+          </div>
         </div>
       </header>
 
-      {/* Main Content Area */}
-      <main className="flex-1 flex overflow-hidden bg-gray-50 dark:bg-gray-900">
-        {children}
+      {/* Main Content */}
+      <main className="flex-1 flex overflow-hidden">
+        <ImageStudio />
       </main>
     </div>
   );

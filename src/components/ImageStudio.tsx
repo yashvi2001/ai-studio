@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useRef, useEffect } from 'react';
+import React, { useCallback, useRef } from 'react';
 import { ImageUpload } from './ImageUpload';
 import { PromptInput } from './PromptInput';
 import { StyleSelector } from './StyleSelector';
@@ -7,69 +7,36 @@ import { PreviewPanel } from './PreviewPanel';
 import { GenerationHistory } from './GenerationHistory';
 import { LoadingSpinner } from './LoadingSpinner';
 import { mockGenerateAPI } from '../services/mockAPI';
+import { useAppState } from '../context/AppStateContext';
 import { ImageData, Generation, StyleType } from '../types';
 
 export const ImageStudio: React.FC = () => {
-  const [uploadedImage, setUploadedImage] = useState<ImageData | null>(null);
-  const [prompt, setPrompt] = useState<string>('');
-  const [selectedStyle, setSelectedStyle] = useState<StyleType>('editorial');
-  const [isGenerating, setIsGenerating] = useState<boolean>(false);
-  const [currentGeneration, setCurrentGeneration] = useState<Generation | null>(
-    null
-  );
-  const [history, setHistory] = useState<Generation[]>([]);
-  const [error, setError] = useState<string | null>(null);
-  const [retryCount, setRetryCount] = useState<number>(0);
-
+  const { state, updateState, addToHistory } = useAppState();
   const abortControllerRef = useRef<AbortController | null>(null);
 
-  // Load history from localStorage on mount
-  useEffect(() => {
-    const savedHistory = localStorage.getItem('ai-studio-history');
-    if (savedHistory) {
-      try {
-        const parsed = JSON.parse(savedHistory) as Generation[];
-        setHistory(parsed);
-      } catch (e) {
-        console.error('Failed to load history:', e);
-      }
-    }
-  }, []);
-
-  // Save history to localStorage whenever it changes
-  useEffect(() => {
-    localStorage.setItem('ai-studio-history', JSON.stringify(history));
-  }, [history]);
-
   const handleImageUpload = useCallback((imageData: ImageData | null) => {
-    setUploadedImage(imageData);
-    setError(null);
-  }, []);
+    updateState({ uploadedImage: imageData, error: null });
+  }, [updateState]);
 
   const handlePromptChange = useCallback((newPrompt: string) => {
-    setPrompt(newPrompt);
-  }, []);
+    updateState({ prompt: newPrompt });
+  }, [updateState]);
 
   const handleStyleChange = useCallback((newStyle: StyleType) => {
-    setSelectedStyle(newStyle);
-  }, []);
-
-  const addToHistory = useCallback((generation: Generation) => {
-    setHistory((prev) => {
-      const newHistory = [generation, ...prev.slice(0, 4)]; // Keep only last 5
-      return newHistory;
-    });
-  }, []);
+    updateState({ selectedStyle: newStyle });
+  }, [updateState]);
 
   const handleGenerate = useCallback(async () => {
-    if (!uploadedImage || !prompt.trim()) {
-      setError('Please upload an image and enter a prompt');
+    if (!state.uploadedImage || !state.prompt.trim()) {
+      updateState({ error: 'Please upload an image and enter a prompt' });
       return;
     }
 
-    setIsGenerating(true);
-    setError(null);
-    setRetryCount(0);
+    updateState({ 
+      isGenerating: true, 
+      error: null, 
+      retryCount: 0 
+    });
 
     // Create abort controller for this request
     abortControllerRef.current = new AbortController();
@@ -78,20 +45,22 @@ export const ImageStudio: React.FC = () => {
       try {
         const result = await mockGenerateAPI(
           {
-            imageDataUrl: uploadedImage.dataUrl,
-            prompt: prompt.trim(),
-            style: selectedStyle,
+            imageDataUrl: state.uploadedImage!.dataUrl,
+            prompt: state.prompt.trim(),
+            style: state.selectedStyle,
           },
           abortControllerRef.current?.signal
         );
 
-        setCurrentGeneration(result);
+        updateState({ 
+          currentGeneration: result, 
+          isGenerating: false, 
+          retryCount: 0 
+        });
         addToHistory(result);
-        setIsGenerating(false);
-        setRetryCount(0);
       } catch (err) {
         if (err instanceof Error && err.name === 'AbortError') {
-          setIsGenerating(false);
+          updateState({ isGenerating: false });
           return;
         }
 
@@ -100,38 +69,43 @@ export const ImageStudio: React.FC = () => {
           err instanceof Error &&
           err.message === 'Model overloaded'
         ) {
-          setRetryCount(attempt);
+          updateState({ retryCount: attempt });
           const delay = Math.pow(2, attempt - 1) * 1000; // Exponential backoff
           setTimeout(() => attemptGenerate(attempt + 1), delay);
         } else {
-          setError(err instanceof Error ? err.message : 'Generation failed');
-          setIsGenerating(false);
-          setRetryCount(0);
+          updateState({ 
+            error: err instanceof Error ? err.message : 'Generation failed',
+            isGenerating: false,
+            retryCount: 0
+          });
         }
       }
     };
 
     await attemptGenerate();
-  }, [uploadedImage, prompt, selectedStyle, addToHistory]);
+  }, [state.uploadedImage, state.prompt, state.selectedStyle, updateState, addToHistory]);
 
   const handleAbort = useCallback(() => {
     if (abortControllerRef.current) {
       abortControllerRef.current.abort();
       abortControllerRef.current = null;
     }
-    setIsGenerating(false);
-    setRetryCount(0);
-    setError(null);
-  }, []);
+    updateState({ 
+      isGenerating: false, 
+      retryCount: 0, 
+      error: null 
+    });
+  }, [updateState]);
 
   const handleHistorySelect = useCallback((generation: Generation) => {
-    setCurrentGeneration(generation);
-    // Optionally restore the prompt and style
-    setPrompt(generation.prompt);
-    setSelectedStyle(generation.style);
-  }, []);
+    updateState({ 
+      currentGeneration: generation,
+      prompt: generation.prompt,
+      selectedStyle: generation.style
+    });
+  }, [updateState]);
 
-  const canGenerate = uploadedImage && prompt.trim() && !isGenerating;
+  const canGenerate = state.uploadedImage && state.prompt.trim() && !state.isGenerating;
 
   return (
     <div
@@ -148,7 +122,7 @@ export const ImageStudio: React.FC = () => {
             </h2>
             <ImageUpload
               onImageUpload={handleImageUpload}
-              currentImage={uploadedImage}
+              currentImage={state.uploadedImage}
             />
           </div>
 
@@ -157,14 +131,14 @@ export const ImageStudio: React.FC = () => {
               Prompt & Style
             </h2>
             <PromptInput
-              value={prompt}
+              value={state.prompt}
               onChange={handlePromptChange}
-              disabled={isGenerating}
+              disabled={state.isGenerating}
             />
             <StyleSelector
-              value={selectedStyle}
+              value={state.selectedStyle}
               onChange={handleStyleChange}
-              disabled={isGenerating}
+              disabled={state.isGenerating}
             />
           </div>
 
@@ -173,11 +147,11 @@ export const ImageStudio: React.FC = () => {
               onClick={handleGenerate}
               onAbort={handleAbort}
               disabled={!canGenerate}
-              isGenerating={isGenerating}
-              retryCount={retryCount}
+              isGenerating={state.isGenerating}
+              retryCount={state.retryCount}
             />
 
-            {error && (
+            {state.error && (
               <div
                 className="flex items-center gap-2 p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-md text-red-700 dark:text-red-300 text-sm"
                 role="alert"
@@ -192,45 +166,35 @@ export const ImageStudio: React.FC = () => {
                 >
                   <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" />
                 </svg>
-                {error}
+                {state.error}
               </div>
             )}
           </div>
-
-          <div className="space-y-4">
-            <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-3">
-              Recent Generations
-            </h2>
-            <GenerationHistory
-              history={history}
-              onSelect={handleHistorySelect}
-              currentId={currentGeneration?.id}
-            />
-          </div>
         </div>
 
-        {/* Right Panel - Preview */}
-        <div className="flex-1 relative overflow-hidden">
+        {/* Right Panel - Preview & History */}
+        <div className="flex-1 flex flex-col overflow-hidden">
           <PreviewPanel
-            uploadedImage={uploadedImage}
-            prompt={prompt}
-            style={selectedStyle}
-            currentGeneration={currentGeneration}
-            isGenerating={isGenerating}
+            uploadedImage={state.uploadedImage}
+            currentGeneration={state.currentGeneration}
+            isGenerating={state.isGenerating}
+            onAbort={handleAbort}
           />
-
-          {isGenerating && (
-            <div className="absolute inset-0 bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm flex flex-col items-center justify-center z-10">
-              <LoadingSpinner />
-              <p className="mt-4 text-gray-600 dark:text-gray-400 text-sm">
-                {retryCount > 0
-                  ? `Retrying... (${retryCount}/3)`
-                  : 'Generating your image...'}
-              </p>
-            </div>
-          )}
+          
+          <GenerationHistory
+            history={state.history}
+            onSelect={handleHistorySelect}
+            currentGeneration={state.currentGeneration}
+          />
         </div>
       </div>
+
+      {/* Loading Overlay */}
+      {state.isGenerating && (
+        <LoadingSpinner
+          message={`Generating image...${state.retryCount > 0 ? ` (Attempt ${state.retryCount + 1})` : ''}`}
+        />
+      )}
     </div>
   );
 };

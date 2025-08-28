@@ -1,14 +1,14 @@
 import React from 'react';
 import { ThemeProvider } from './context/ThemeContext';
+import { AppStateProvider } from './context/AppStateContext';
 import { Layout } from './components/Layout';
-import { ImageStudio } from './components/ImageStudio';
 
 const App: React.FC = () => {
   return (
     <ThemeProvider>
-      <Layout>
-        <ImageStudio />
-      </Layout>
+      <AppStateProvider>
+        <Layout />
+      </AppStateProvider>
     </ThemeProvider>
   );
 };

@@ -1,14 +1,23 @@
 import React from 'react';
-import { PreviewPanelProps } from '../types';
+import { useAppState } from '../context/AppStateContext';
+
+interface PreviewPanelProps {
+  uploadedImage: any;
+  currentGeneration: any;
+  isGenerating: boolean;
+  onAbort: () => void;
+}
 
 export const PreviewPanel: React.FC<PreviewPanelProps> = ({
   uploadedImage,
-  prompt,
-  style,
   currentGeneration,
   isGenerating,
+  onAbort,
 }) => {
+  const { state } = useAppState();
+
   const formatStyle = (styleValue: string): string => {
+    if (!styleValue) return 'Editorial';
     return styleValue.charAt(0).toUpperCase() + styleValue.slice(1);
   };
 
@@ -123,13 +132,13 @@ export const PreviewPanel: React.FC<PreviewPanelProps> = ({
               <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100">
                 Prompt
               </h3>
-              {prompt.trim() ? (
+              {state.prompt && state.prompt.trim() ? (
                 <div className="space-y-2">
                   <p className="text-gray-900 dark:text-gray-100 bg-gray-50 dark:bg-gray-800 p-3 rounded-lg">
-                    {prompt}
+                    {state.prompt}
                   </p>
                   <div className="text-sm text-gray-500 dark:text-gray-400">
-                    {prompt.split(' ').length} words • {prompt.length}{' '}
+                    {state.prompt.split(' ').length} words • {state.prompt.length}{' '}
                     characters
                   </div>
                 </div>
@@ -154,12 +163,12 @@ export const PreviewPanel: React.FC<PreviewPanelProps> = ({
               </h3>
               <div className="inline-block">
                 <span className="bg-blue-100 dark:bg-blue-900/20 text-blue-800 dark:text-blue-200 px-3 py-1 rounded-full text-sm font-medium">
-                  {formatStyle(style)}
+                  {formatStyle(state.selectedStyle)}
                 </span>
               </div>
             </div>
 
-            {uploadedImage && prompt.trim() && (
+            {uploadedImage && state.prompt && state.prompt.trim() && (
               <div className="flex items-center gap-3 p-4 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg">
                 <svg
                   width="24"
