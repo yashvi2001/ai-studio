@@ -116,7 +116,7 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
             <img
               src={currentImage.dataUrl}
               alt={`Preview of uploaded image: ${currentImage.name}`}
-              className="w-full h-48 object-cover rounded-lg"
+              className="w-full h-32 sm:h-40 lg:h-48 object-cover rounded-lg"
             />
             <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center gap-2">
               <button
@@ -137,7 +137,7 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
               </button>
               <button
                 onClick={handleClick}
-                className="p-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900 transition-colors"
+                className="p-2 bg-gradient-to-r from-pink-500 to-purple-600 text-white rounded-md hover:from-pink-600 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900 transition-colors"
                 aria-label="Replace image"
                 type="button"
                 disabled={processingState.isProcessing}
@@ -167,7 +167,7 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
                 </span>
               )}
               {currentImage.originalSize !== currentImage.size && (
-                <span className="text-blue-600 dark:text-blue-400">
+                <span className="text-pink-600 dark:text-pink-400">
                   {' '}
                   • Resized
                 </span>
@@ -177,11 +177,11 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
         </div>
       ) : (
         <div
-          className={`relative border-2 border-dashed rounded-lg p-8 text-center cursor-pointer transition-all duration-200 ${
+          className={`relative border-2 border-dashed rounded-lg p-6 sm:p-8 text-center cursor-pointer transition-all duration-200 ${
             isDragOver
-              ? 'border-blue-600 bg-blue-50 dark:bg-blue-900/20 scale-105'
-              : 'border-gray-300 dark:border-gray-600 hover:border-blue-500 dark:hover:border-blue-400 hover:bg-gray-50 dark:hover:bg-gray-800'
-          } ${processingState.isProcessing ? 'pointer-events-none opacity-50' : ''} focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900`}
+              ? 'border-pink-600 bg-pink-50 dark:bg-pink-900/20 scale-105'
+              : 'border-gray-300 dark:border-gray-600 hover:border-pink-500 dark:hover:border-pink-400 hover:bg-gray-50 dark:hover:bg-gray-800'
+          } ${processingState.isProcessing ? 'pointer-events-none opacity-50' : ''} focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900`}
           onDragOver={handleDragOver}
           onDragLeave={handleDragLeave}
           onDrop={handleDrop}
@@ -195,7 +195,7 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
           {processingState.isProcessing ? (
             <div className="flex flex-col items-center gap-3">
               <div
-                className="w-8 h-8 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"
+                className="w-8 h-8 border-2 border-pink-600 border-t-transparent rounded-full animate-spin"
                 role="status"
                 aria-label="Processing image"
               ></div>
@@ -206,8 +206,8 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
           ) : (
             <div className="flex flex-col items-center gap-3">
               <svg
-                width="48"
-                height="48"
+                width="40"
+                height="40"
                 viewBox="0 0 24 24"
                 fill="currentColor"
                 className="text-gray-400 dark:text-gray-500"
@@ -216,10 +216,10 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
                 <path d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20Z" />
               </svg>
               <div className="space-y-1">
-                <p className="text-lg font-medium text-gray-900 dark:text-gray-100">
+                <p className="text-base sm:text-lg font-medium text-gray-900 dark:text-gray-100">
                   {isDragOver ? 'Drop your image here' : 'Upload an image'}
                 </p>
-                <p className="text-gray-500 dark:text-gray-400">
+                <p className="text-sm text-gray-500 dark:text-gray-400">
                   Drag & drop or click to browse
                 </p>
                 <p

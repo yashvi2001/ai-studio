@@ -6,36 +6,36 @@ export const Layout: React.FC = () => {
   const { isDark, toggleTheme } = useTheme();
 
   return (
-    <div className="min-h-screen bg-white dark:bg-gray-900 transition-colors duration-200">
+    <div className="h-screen bg-white dark:bg-gray-900 transition-colors duration-200 flex flex-col overflow-hidden">
       {/* Skip to main content link for screen readers */}
       <a
         href="#main-content"
-        className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-blue-600 text-white px-4 py-2 rounded-md z-50"
+        className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-gradient-to-r from-pink-500 to-purple-600 text-white px-4 py-2 rounded-md z-50"
       >
         Skip to main content
       </a>
 
       {/* Header */}
       <header
-        className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 px-6 py-4"
+        className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 px-4 sm:px-6 py-3 sm:py-4 flex-shrink-0"
         role="banner"
       >
-        <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-4">
-            <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
+        <div className="flex items-center justify-between max-w-7xl mx-auto">
+          <div className="flex items-center space-x-3 sm:space-x-4">
+            <h1 className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-pink-500 to-purple-600 bg-clip-text text-transparent">
               AI Studio
             </h1>
           </div>
 
           <nav
-            className="flex items-center space-x-4"
+            className="flex items-center space-x-3 sm:space-x-4"
             role="navigation"
             aria-label="Main navigation"
           >
             {/* Theme Toggle */}
             <button
               onClick={toggleTheme}
-              className="p-2 rounded-lg bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900 transition-colors"
+              className="p-2 rounded-lg bg-gradient-to-r from-pink-100 to-purple-100 dark:from-pink-900 dark:to-purple-900 text-gray-600 dark:text-gray-300 hover:from-pink-200 hover:to-purple-200 dark:hover:from-pink-800 dark:hover:to-purple-800 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900 transition-all duration-200"
               aria-label={
                 isDark ? 'Switch to light mode' : 'Switch to dark mode'
               }
@@ -43,7 +43,7 @@ export const Layout: React.FC = () => {
             >
               {isDark ? (
                 <svg
-                  className="w-5 h-5"
+                  className="w-4 h-4 sm:w-5 sm:h-5"
                   fill="currentColor"
                   viewBox="0 0 20 20"
                   aria-hidden="true"
@@ -56,7 +56,7 @@ export const Layout: React.FC = () => {
                 </svg>
               ) : (
                 <svg
-                  className="w-5 h-5"
+                  className="w-4 h-4 sm:w-5 sm:h-5"
                   fill="currentColor"
                   viewBox="0 0 20 20"
                   aria-hidden="true"
@@ -72,7 +72,7 @@ export const Layout: React.FC = () => {
       {/* Main Content */}
       <main
         id="main-content"
-        className="flex-1 flex overflow-hidden"
+        className="flex-1 flex overflow-hidden min-h-0"
         role="main"
         aria-label="AI Image Studio main content"
       >

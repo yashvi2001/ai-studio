@@ -24,9 +24,9 @@ export const PreviewPanel: React.FC<PreviewPanelProps> = ({
   };
 
   return (
-    <div className="w-full h-full flex flex-col bg-white dark:bg-gray-900">
-      <div className="flex items-center justify-between p-3 border-b border-gray-200 dark:border-gray-700">
-        <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100">
+    <div className="w-full h-full flex flex-col bg-white dark:bg-gray-900 overflow-hidden">
+      <div className="flex items-center justify-between p-3 border-b border-gray-200 dark:border-gray-700 flex-shrink-0">
+        <h2 className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-gray-100">
           Preview
         </h2>
         <div className="flex items-center gap-2">
@@ -51,11 +51,11 @@ export const PreviewPanel: React.FC<PreviewPanelProps> = ({
         </div>
       </div>
 
-      <div className="flex-1 p-3 overflow-y-auto">
+      <div className="flex-1 p-3 overflow-y-auto min-h-0 custom-scrollbar">
         {/* Generated Result */}
         {currentGeneration ? (
-          <div className="space-y-2">
-            <div className="text-center">
+          <div className="space-y-3 h-full flex flex-col">
+            <div className="text-center flex-shrink-0">
               <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-1">
                 Generated Image
               </h3>
@@ -64,12 +64,12 @@ export const PreviewPanel: React.FC<PreviewPanelProps> = ({
               </p>
             </div>
 
-            <div className="flex justify-center">
-              <div className="relative group w-full border border-gray-200 dark:border-gray-700 rounded-lg p-1 bg-gray-50 dark:bg-gray-800">
+            <div className="flex-1 flex items-center justify-center min-h-0">
+              <div className="relative group w-full max-w-2xl border border-gray-200 dark:border-gray-700 rounded-lg p-1 bg-gray-50 dark:bg-gray-800">
                 <img
                   src={currentGeneration.imageUrl}
                   alt={`Generated image: ${currentGeneration.prompt}`}
-                  className="w-full h-auto rounded-lg shadow-lg object-contain"
+                  className="w-full h-auto max-h-[60vh] rounded-lg shadow-lg object-contain"
                 />
                 <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center rounded-lg">
                   <button
@@ -96,12 +96,12 @@ export const PreviewPanel: React.FC<PreviewPanelProps> = ({
               </div>
             </div>
 
-            <div className="space-y-2 text-center">
+            <div className="space-y-2 text-center flex-shrink-0">
               <p className="text-gray-900 dark:text-gray-100 font-medium text-sm">
                 {currentGeneration.prompt}
               </p>
               <div className="flex items-center justify-center gap-2 text-xs text-gray-500 dark:text-gray-400">
-                <span className="bg-blue-100 dark:bg-blue-900/20 text-blue-800 dark:text-blue-200 px-2 py-1 rounded">
+                <span className="bg-pink-100 dark:bg-pink-900/20 text-pink-800 dark:text-pink-200 px-2 py-1 rounded">
                   {formatStyle(currentGeneration.style)}
                 </span>
                 <span>•</span>
@@ -113,8 +113,8 @@ export const PreviewPanel: React.FC<PreviewPanelProps> = ({
           </div>
         ) : (
           /* Live Summary */
-          <div className="space-y-3">
-            <div className="space-y-2">
+          <div className="space-y-4 h-full flex flex-col">
+            <div className="space-y-3 flex-shrink-0">
               <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100">
                 Source Image
               </h3>
@@ -157,7 +157,7 @@ export const PreviewPanel: React.FC<PreviewPanelProps> = ({
               )}
             </div>
 
-            <div className="space-y-2">
+            <div className="space-y-3 flex-shrink-0">
               <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100">
                 Prompt
               </h3>
@@ -187,19 +187,19 @@ export const PreviewPanel: React.FC<PreviewPanelProps> = ({
               )}
             </div>
 
-            <div className="space-y-2">
+            <div className="space-y-3 flex-shrink-0">
               <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100">
                 Style
               </h3>
               <div className="inline-block">
-                <span className="bg-blue-100 dark:bg-blue-900/20 text-blue-800 dark:text-blue-200 px-2 py-1 rounded-full text-sm font-medium">
+                <span className="bg-pink-100 dark:bg-pink-900/20 text-pink-800 dark:text-pink-200 px-2 py-1 rounded-full text-sm font-medium">
                   {formatStyle(style)}
                 </span>
               </div>
             </div>
 
             {uploadedImage && prompt && prompt.trim() && (
-              <div className="flex items-center gap-3 p-3 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg">
+              <div className="flex items-center gap-3 p-3 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg flex-shrink-0">
                 <svg
                   width="24"
                   height="24"
@@ -208,7 +208,7 @@ export const PreviewPanel: React.FC<PreviewPanelProps> = ({
                   className="text-green-600 dark:text-green-400"
                   aria-hidden="true"
                 >
-                  <path d="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M11,16.5L6.5,12L7.91,10.59L11,13.67L16.59,8.09L18,9.5L11,16.5Z" />
+                  <path d="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M11,16.5L6.5,12L7.91,10.59L11,13.67L16.59,8.09L18,9.5L11,16-5Z" />
                 </svg>
                 <p className="text-green-800 dark:text-green-200 font-medium">
                   Ready to generate!
@@ -220,10 +220,10 @@ export const PreviewPanel: React.FC<PreviewPanelProps> = ({
       </div>
 
       {isGenerating && (
-        <div className="p-4 border-t border-gray-200 dark:border-gray-700">
+        <div className="p-4 border-t border-gray-200 dark:border-gray-700 flex-shrink-0">
           <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2 mb-2">
             <div
-              className="bg-blue-600 h-2 rounded-full animate-pulse"
+              className="bg-pink-600 h-2 rounded-full animate-pulse"
               style={{ width: '60%' }}
             ></div>
           </div>
