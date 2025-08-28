@@ -3,27 +3,24 @@ import { describe, it, expect } from 'vitest';
 import App from './App';
 
 describe('App', () => {
-  it('renders Vite and React logos', () => {
+  it('renders the AI Studio heading', () => {
     render(<App />);
 
-    const viteLogo = screen.getByAltText('Vite logo');
-    const reactLogo = screen.getByAltText('React logo');
-
-    expect(viteLogo).toBeInTheDocument();
-    expect(reactLogo).toBeInTheDocument();
-  });
-
-  it('renders the main heading', () => {
-    render(<App />);
-
-    const heading = screen.getByText('Vite + React');
+    const heading = screen.getByText('AI Studio');
     expect(heading).toBeInTheDocument();
   });
 
-  it('renders the count button', () => {
+  it('renders the upload image section', () => {
     render(<App />);
 
-    const button = screen.getByRole('button', { name: /count is/i });
-    expect(button).toBeInTheDocument();
+    const uploadHeading = screen.getByText('Upload Image');
+    expect(uploadHeading).toBeInTheDocument();
+  });
+
+  it('renders the theme toggle button', () => {
+    render(<App />);
+
+    const themeButton = screen.getByRole('button', { name: /switch to/i });
+    expect(themeButton).toBeInTheDocument();
   });
 });

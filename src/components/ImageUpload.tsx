@@ -1,117 +1,43 @@
 import React, { useState, useCallback, useRef } from 'react';
 import { ImageUploadProps, ImageData } from '../types';
-import { isValidImageType, isValidFileSize } from '../utils/helpers';
+import { useImageProcessing } from '../hooks/useImageProcessing';
+import { devLog } from '../utils/logger';
 
 export const ImageUpload: React.FC<ImageUploadProps> = ({
   onImageUpload,
   currentImage,
 }) => {
   const [isDragOver, setIsDragOver] = useState<boolean>(false);
-  const [isProcessing, setIsProcessing] = useState<boolean>(false);
-  const [error, setError] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const resizeImage = (
-    file: File,
-    maxWidth: number = 1920,
-    maxHeight: number = 1920
-  ): Promise<Blob> => {
-    return new Promise((resolve) => {
-      const canvas = document.createElement('canvas');
-      const ctx = canvas.getContext('2d');
-      const img = new Image();
-
-      img.onload = () => {
-        let { width, height } = img;
-
-        // Calculate new dimensions
-        if (width > maxWidth || height > maxHeight) {
-          const ratio = Math.min(maxWidth / width, maxHeight / height);
-          width = Math.floor(width * ratio);
-          height = Math.floor(height * ratio);
-        }
-
-        canvas.width = width;
-        canvas.height = height;
-
-        // Draw and compress
-        if (ctx) {
-          ctx.drawImage(img, 0, 0, width, height);
-        }
-
-        canvas.toBlob(
-          (blob) => {
-            if (blob) {
-              resolve(blob);
-            }
-          },
-          'image/jpeg',
-          0.9
-        );
-      };
-
-      img.src = URL.createObjectURL(file);
-    });
-  };
+  const { processImage, processingState } = useImageProcessing({
+    maxWidth: 1920,
+    maxHeight: 1080,
+    quality: 0.9,
+  });
 
   const processFile = useCallback(
     async (file: File): Promise<void> => {
-      setError(null);
-
-      // Validate file type
-      if (!isValidImageType(file)) {
-        setError('Please upload a PNG or JPG file');
-        return;
-      }
-
-      // Validate file size (10MB limit)
-      if (!isValidFileSize(file, 10)) {
-        setError('File size must be less than 10MB');
-        return;
-      }
-
-      setIsProcessing(true);
-
       try {
-        // Resize if needed
-        const processedFile = await resizeImage(file);
+        const processedImage = await processImage(file);
 
-        // Create data URL
-        const reader = new FileReader();
-        reader.onload = (e) => {
-          const result = e.target?.result;
-          if (typeof result === 'string') {
-            const imageData: ImageData = {
-              file: new File([processedFile], file.name, {
-                type: 'image/jpeg',
-              }),
-              dataUrl: result,
-              name: file.name,
-              size: processedFile.size,
-              originalSize: file.size,
-              dimensions: null, // Will be set when image loads
-            };
-
-            // Get image dimensions
-            const img = new Image();
-            img.onload = () => {
-              imageData.dimensions = {
-                width: img.naturalWidth,
-                height: img.naturalHeight,
-              };
-              onImageUpload(imageData);
-              setIsProcessing(false);
-            };
-            img.src = result;
-          }
+        const imageData: ImageData = {
+          file: processedImage.originalFile,
+          dataUrl: processedImage.dataUrl,
+          name: file.name,
+          size: processedImage.fileSize,
+          originalSize: file.size,
+          dimensions: processedImage.dimensions,
         };
-        reader.readAsDataURL(processedFile);
-      } catch {
-        setError('Failed to process image. Please try again.');
-        setIsProcessing(false);
+
+        onImageUpload(imageData);
+      } catch (error) {
+        // Error is handled by the useImageProcessing hook
+        // Log only in development
+        devLog.error('Failed to process image:', error);
       }
     },
-    [onImageUpload]
+    [processImage, onImageUpload]
   );
 
   const handleFileSelect = useCallback(
@@ -152,10 +78,10 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
   );
 
   const handleClick = useCallback(() => {
-    if (!isProcessing && fileInputRef.current) {
+    if (!processingState.isProcessing && fileInputRef.current) {
       fileInputRef.current.click();
     }
-  }, [isProcessing]);
+  }, [processingState.isProcessing]);
 
   const handleKeyDown = useCallback(
     (event: React.KeyboardEvent) => {
@@ -181,7 +107,7 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
         onChange={handleFileSelect}
         className="hidden"
         aria-label="Select image file"
-        disabled={isProcessing}
+        disabled={processingState.isProcessing}
       />
 
       {currentImage ? (
@@ -214,7 +140,7 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
                 className="p-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900 transition-colors"
                 aria-label="Replace image"
                 type="button"
-                disabled={isProcessing}
+                disabled={processingState.isProcessing}
               >
                 <svg
                   width="20"
@@ -255,7 +181,7 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
             isDragOver
               ? 'border-blue-600 bg-blue-50 dark:bg-blue-900/20 scale-105'
               : 'border-gray-300 dark:border-gray-600 hover:border-blue-500 dark:hover:border-blue-400 hover:bg-gray-50 dark:hover:bg-gray-800'
-          } ${isProcessing ? 'pointer-events-none opacity-50' : ''} focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900`}
+          } ${processingState.isProcessing ? 'pointer-events-none opacity-50' : ''} focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900`}
           onDragOver={handleDragOver}
           onDragLeave={handleDragLeave}
           onDrop={handleDrop}
@@ -266,9 +192,9 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
           aria-label="Upload image area. Click or drag and drop to upload."
           aria-describedby="upload-instructions"
         >
-          {isProcessing ? (
+          {processingState.isProcessing ? (
             <div className="flex flex-col items-center gap-3">
-              <div 
+              <div
                 className="w-8 h-8 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"
                 role="status"
                 aria-label="Processing image"
@@ -296,7 +222,10 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
                 <p className="text-gray-500 dark:text-gray-400">
                   Drag & drop or click to browse
                 </p>
-                <p id="upload-instructions" className="text-xs text-gray-400 dark:text-gray-500">
+                <p
+                  id="upload-instructions"
+                  className="text-xs text-gray-400 dark:text-gray-500"
+                >
                   PNG/JPG • Max 10MB • Auto-resize to 1920px
                 </p>
               </div>
@@ -305,7 +234,7 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
         </div>
       )}
 
-      {error && (
+      {processingState.error && (
         <div
           className="mt-3 flex items-center gap-2 p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-md text-red-700 dark:text-red-300 text-sm"
           role="alert"
@@ -322,7 +251,7 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
           >
             <path d="M12,2L13.09,8.26L22,9L13.09,9.74L12,16L10.91,9.74L2,9L10.91,8.26L12,2Z" />
           </svg>
-          <span id="error-message">{error}</span>
+          <span id="error-message">{processingState.error}</span>
         </div>
       )}
     </div>

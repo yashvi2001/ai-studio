@@ -140,8 +140,8 @@ export const PreviewPanel: React.FC<PreviewPanelProps> = ({
                     {state.prompt}
                   </p>
                   <div className="text-sm text-gray-500 dark:text-gray-400">
-                    {state.prompt.split(' ').length} words • {state.prompt.length}{' '}
-                    characters
+                    {state.prompt.split(' ').length} words •{' '}
+                    {state.prompt.length} characters
                   </div>
                 </div>
               ) : (
