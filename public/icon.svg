@@ -1,40 +1,37 @@
 <svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
   <defs>
-    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#3b82f6;stop-opacity:1" />
-      <stop offset="100%" style="stop-color:#1d4ed8;stop-opacity:1" />
+    <linearGradient id="modelia-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#ec4899;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#a855f7;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#7c3aed;stop-opacity:1" />
     </linearGradient>
-    <linearGradient id="icon" x1="0%" y1="0%" x2="100%" y2="100%">
+    <linearGradient id="text-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
       <stop offset="0%" style="stop-color:#ffffff;stop-opacity:1" />
       <stop offset="100%" style="stop-color:#f3f4f6;stop-opacity:1" />
     </linearGradient>
   </defs>
   
-  <!-- Background circle -->
-  <circle cx="256" cy="256" r="240" fill="url(#bg)" stroke="#1e40af" stroke-width="8"/>
+  <!-- Background circle with Modelia gradient -->
+  <circle cx="256" cy="256" r="240" fill="url(#modelia-gradient)" stroke="#7c3aed" stroke-width="8"/>
   
-  <!-- AI Brain Icon -->
-  <g fill="url(#icon)">
-    <!-- Main brain shape -->
-    <path d="M256 120c-44.18 0-80 35.82-80 80 0 35.35 22.94 65.3 55 75.7V320c0 8.84 7.16 16 16 16s16-7.16 16-16v-44.3c32.06-10.4 55-40.35 55-75.7 0-44.18-35.82-80-80-80z"/>
+  <!-- Modelia Logo Text -->
+  <g fill="url(#text-gradient)" font-family="Arial, sans-serif" font-weight="bold">
+    <!-- "modelia" text -->
+    <text x="256" y="220" text-anchor="middle" font-size="80" letter-spacing="2">
+      modelia
+    </text>
     
-    <!-- Neural network nodes -->
-    <circle cx="200" cy="160" r="8"/>
-    <circle cx="312" cy="160" r="8"/>
-    <circle cx="240" cy="200" r="6"/>
-    <circle cx="272" cy="200" r="6"/>
-    <circle cx="256" cy="240" r="10"/>
-    
-    <!-- Connection lines -->
-    <path d="M200 160 Q256 200 312 160" stroke="url(#icon)" stroke-width="3" fill="none" opacity="0.7"/>
-    <path d="M240 200 Q256 240 272 200" stroke="url(#icon)" stroke-width="2" fill="none" opacity="0.7"/>
+    <!-- "AI Studio" text -->
+    <text x="256" y="320" text-anchor="middle" font-size="48" letter-spacing="1">
+      AI Studio
+    </text>
   </g>
   
-  <!-- Sparkle effects -->
-  <g fill="#ffffff" opacity="0.8">
-    <circle cx="180" cy="140" r="3"/>
-    <circle cx="332" cy="140" r="3"/>
-    <circle cx="160" cy="280" r="2"/>
-    <circle cx="352" cy="280" r="2"/>
+  <!-- Decorative elements -->
+  <g fill="#ffffff" opacity="0.3">
+    <circle cx="120" cy="120" r="8"/>
+    <circle cx="392" cy="120" r="8"/>
+    <circle cx="120" cy="392" r="8"/>
+    <circle cx="392" cy="392" r="8"/>
   </g>
 </svg> 

@@ -22,12 +22,7 @@ export const Layout: React.FC = () => {
       >
         <div className="flex items-center justify-between max-w-7xl mx-auto">
           <div className="flex items-center space-x-3 sm:space-x-4">
-            {/* Modelia Logo */}
-            <img 
-              src="/modelia-logo.svg" 
-              alt="Modelia Logo" 
-              className="h-8 w-auto"
-            />
+          
             <h1 className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-pink-500 to-purple-600 bg-clip-text text-transparent">
               AI Studio
             </h1>
