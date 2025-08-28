@@ -1,36 +1,37 @@
 <!doctype html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/icon.svg" />
+    <link rel="manifest" href="/manifest.json" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#ec4899" />
+    <meta
+      name="description"
+      content="AI-powered image generation and editing studio"
+    />
+    <title>AI Studio</title>
+    <script>
+      // Initialize theme before React renders to prevent flash
+      (function () {
+        const theme = localStorage.getItem('ai-studio-theme');
+        const isDark = theme
+          ? theme === 'dark'
+          : window.matchMedia('(prefers-color-scheme: dark)').matches;
 
-<head>
-  <meta charset="UTF-8" />
-  <link rel="icon" type="image/svg+xml" href="/icon.svg" />
-  <link rel="manifest" href="/manifest.json" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="theme-color" content="#ec4899" />
-  <meta name="description" content="AI-powered image generation and editing studio" />
-  <title>AI Studio</title>
-  <script>
-    // Initialize theme before React renders to prevent flash
-    (function () {
-      const theme = localStorage.getItem('ai-studio-theme');
-      const isDark = theme
-        ? theme === 'dark'
-        : window.matchMedia('(prefers-color-scheme: dark)').matches;
+        if (isDark) {
+          document.documentElement.classList.add('dark');
+          document.documentElement.setAttribute('data-theme', 'dark');
+        } else {
+          document.documentElement.classList.remove('dark');
+          document.documentElement.setAttribute('data-theme', 'light');
+        }
+      })();
+    </script>
+  </head>
 
-      if (isDark) {
-        document.documentElement.classList.add('dark');
-        document.documentElement.setAttribute('data-theme', 'dark');
-      } else {
-        document.documentElement.classList.remove('dark');
-        document.documentElement.setAttribute('data-theme', 'light');
-      }
-    })();
-  </script>
-</head>
-
-<body>
-  <div id="root"></div>
-  <script type="module" src="/src/main.tsx"></script>
-</body>
-
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
 </html>
