@@ -1,0 +1,37 @@
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="modelia-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#ec4899;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#a855f7;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#7c3aed;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="text-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#ffffff;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#f3f4f6;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Background circle with Modelia gradient -->
+  <circle cx="256" cy="256" r="240" fill="url(#modelia-gradient)" stroke="#7c3aed" stroke-width="8"/>
+  
+  <!-- Modelia Logo Text -->
+  <g fill="url(#text-gradient)" font-family="Arial, sans-serif" font-weight="bold">
+    <!-- "modelia" text -->
+    <text x="256" y="220" text-anchor="middle" font-size="80" letter-spacing="2">
+      modelia
+    </text>
+    
+    <!-- "AI Studio" text -->
+    <text x="256" y="320" text-anchor="middle" font-size="48" letter-spacing="1">
+      AI Studio
+    </text>
+  </g>
+  
+  <!-- Decorative elements -->
+  <g fill="#ffffff" opacity="0.3">
+    <circle cx="120" cy="120" r="8"/>
+    <circle cx="392" cy="120" r="8"/>
+    <circle cx="120" cy="392" r="8"/>
+    <circle cx="392" cy="392" r="8"/>
+  </g>
+</svg> 

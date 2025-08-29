@@ -134,46 +134,58 @@ export const ImageStudio: React.FC = () => {
       role="region"
       aria-label="AI Image Studio"
     >
-      <div className="flex-1 flex overflow-hidden">
+      <div className="flex-1 flex flex-col xl:flex-row overflow-hidden min-h-0">
         {/* Left Panel - Controls */}
         <aside
-          className="w-80 bg-gray-50 dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 flex flex-col p-6 space-y-6 overflow-y-auto"
+          className="w-full xl:w-80 bg-gray-50 dark:bg-gray-800 border-b xl:border-b-0 xl:border-r border-gray-200 dark:border-gray-700 flex flex-col p-4 sm:p-6 space-y-4 sm:space-y-6 overflow-y-auto custom-scrollbar flex-shrink-0 xl:max-h-none"
           role="complementary"
           aria-label="Image generation controls"
         >
-          <section className="space-y-4" aria-labelledby="upload-heading">
-            <h2
-              id="upload-heading"
-              className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-3"
+          <div className="flex-1 space-y-4 sm:space-y-6 overflow-y-auto">
+            <section
+              className="space-y-3 sm:space-y-4"
+              aria-labelledby="upload-heading"
             >
-              Upload Image
-            </h2>
-            <ImageUpload
-              onImageUpload={handleImageUpload}
-              currentImage={state.uploadedImage}
-            />
-          </section>
+              <h2
+                id="upload-heading"
+                className="text-base sm:text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2 sm:mb-3"
+              >
+                Upload Image
+              </h2>
+              <ImageUpload
+                onImageUpload={handleImageUpload}
+                currentImage={state.uploadedImage}
+              />
+            </section>
 
-          <section className="space-y-4" aria-labelledby="prompt-heading">
-            <h2
-              id="prompt-heading"
-              className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-3"
+            <section
+              className="space-y-3 sm:space-y-4"
+              aria-labelledby="prompt-heading"
             >
-              Prompt & Style
-            </h2>
-            <PromptInput
-              value={state.prompt}
-              onChange={handlePromptChange}
-              disabled={state.isGenerating}
-            />
-            <StyleSelector
-              value={state.selectedStyle}
-              onChange={handleStyleChange}
-              disabled={state.isGenerating}
-            />
-          </section>
+              <h2
+                id="prompt-heading"
+                className="text-base sm:text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2 sm:mb-3"
+              >
+                Prompt & Style
+              </h2>
+              <PromptInput
+                value={state.prompt}
+                onChange={handlePromptChange}
+                disabled={state.isGenerating}
+              />
+              <StyleSelector
+                value={state.selectedStyle}
+                onChange={handleStyleChange}
+                disabled={state.isGenerating}
+              />
+            </section>
+          </div>
 
-          <section className="space-y-4" aria-labelledby="generate-heading">
+          {/* Generate Button Section - Always Visible */}
+          <section
+            className="space-y-3 sm:space-y-4 pt-4 border-t border-gray-200 dark:border-gray-700 flex-shrink-0"
+            aria-labelledby="generate-heading"
+          >
             <h2 id="generate-heading" className="sr-only">
               Generate Image
             </h2>
@@ -209,19 +221,25 @@ export const ImageStudio: React.FC = () => {
         </aside>
 
         {/* Right Panel - Preview & History */}
-        <div className="flex-1 flex flex-col overflow-hidden">
-          <PreviewPanel
-            uploadedImage={state.uploadedImage}
-            currentGeneration={state.currentGeneration}
-            isGenerating={state.isGenerating}
-            onAbort={handleAbort}
-          />
+        <div className="flex-1 flex flex-col overflow-hidden min-h-0">
+          <div className="flex-1 overflow-hidden min-h-0">
+            <PreviewPanel
+              uploadedImage={state.uploadedImage}
+              prompt={state.prompt}
+              style={state.selectedStyle}
+              currentGeneration={state.currentGeneration}
+              isGenerating={state.isGenerating}
+              onAbort={handleAbort}
+            />
+          </div>
 
-          <GenerationHistory
-            history={state.history}
-            onSelect={handleHistorySelect}
-            currentId={state.currentGeneration?.id}
-          />
+          <div className="border-t border-gray-200 dark:border-gray-700 p-3 flex-shrink-0">
+            <GenerationHistory
+              history={state.history}
+              onSelect={handleHistorySelect}
+              currentGeneration={state.currentGeneration}
+            />
+          </div>
         </div>
       </div>
 

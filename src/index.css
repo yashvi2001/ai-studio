@@ -15,10 +15,17 @@ body {
     'calt' 1;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  overflow: hidden;
 }
 
 html {
   scroll-behavior: smooth;
+  height: 100%;
+}
+
+#root {
+  height: 100vh;
+  overflow: hidden;
 }
 
 /* Custom utility classes */
@@ -28,6 +35,27 @@ html {
     system-ui,
     -apple-system,
     sans-serif;
+}
+
+/* Modelia theme gradient utilities */
+.gradient-text {
+  @apply bg-gradient-to-r from-pink-500 to-purple-600 bg-clip-text text-transparent;
+}
+
+.gradient-bg {
+  @apply bg-gradient-to-r from-pink-500 to-purple-600;
+}
+
+.gradient-bg-light {
+  @apply bg-gradient-to-r from-pink-100 to-purple-100;
+}
+
+.gradient-bg-dark {
+  @apply bg-gradient-to-r from-pink-900 to-purple-900;
+}
+
+.gradient-border {
+  @apply border border-transparent bg-gradient-to-r from-pink-500 to-purple-600 bg-clip-border;
 }
 
 /* Dark mode overrides */
@@ -41,4 +69,140 @@ html {
     color, background-color, border-color, text-decoration-color, fill, stroke;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   transition-duration: 150ms;
+}
+
+/* Custom scrollbar styles for better desktop experience */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 3px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #9ca3af;
+}
+
+.dark .custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #4b5563;
+}
+
+.dark .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #6b7280;
+}
+
+/* Ensure proper viewport handling */
+.viewport-container {
+  height: 100vh;
+  max-height: 100vh;
+  overflow: hidden;
+}
+
+/* Responsive text sizing */
+.text-responsive-xs {
+  font-size: clamp(0.75rem, 0.7rem + 0.25vw, 0.875rem);
+}
+
+.text-responsive-sm {
+  font-size: clamp(0.875rem, 0.8rem + 0.375vw, 1rem);
+}
+
+.text-responsive-base {
+  font-size: clamp(1rem, 0.9rem + 0.5vw, 1.125rem);
+}
+
+.text-responsive-lg {
+  font-size: clamp(1.125rem, 1rem + 0.625vw, 1.25rem);
+}
+
+.text-responsive-xl {
+  font-size: clamp(1.25rem, 1.1rem + 0.75vw, 1.5rem);
+}
+
+/* Ensure proper flex behavior */
+.flex-viewport {
+  flex: 1 1 0%;
+  min-height: 0;
+  min-width: 0;
+}
+
+/* Prevent content overflow */
+.overflow-safe {
+  overflow: hidden;
+  min-height: 0;
+  min-width: 0;
+}
+
+/* Dropdown animations and styling */
+.dropdown-enter {
+  opacity: 0;
+  transform: translateY(10px) scale(0.95);
+}
+
+.dropdown-enter-active {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  transition:
+    opacity 200ms ease-out,
+    transform 200ms ease-out;
+}
+
+.dropdown-exit {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+.dropdown-exit-active {
+  opacity: 0;
+  transform: translateY(10px) scale(0.95);
+  transition:
+    opacity 150ms ease-in,
+    transform 150ms ease-in;
+}
+
+/* Enhanced button hover effects */
+.btn-hover-lift {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.btn-hover-lift:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    0 10px 25px -5px rgba(0, 0, 0, 0.1),
+    0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+/* Dropdown backdrop blur effect */
+.dropdown-backdrop {
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+/* Smooth icon rotation */
+.icon-rotate {
+  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Enhanced focus states */
+.focus-ring {
+  @apply focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900;
+}
+
+/* Glass morphism effect for dropdowns */
+.glass-effect {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.dark .glass-effect {
+  background: rgba(31, 41, 55, 0.95);
+  border: 1px solid rgba(75, 85, 99, 0.2);
 }

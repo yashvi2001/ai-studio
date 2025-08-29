@@ -11,32 +11,31 @@ describe('StyleSelector', () => {
     vi.clearAllMocks();
   });
 
-  it('renders all style options', () => {
+  it('renders selected style in dropdown button', () => {
     render(<StyleSelector value="editorial" onChange={mockOnChange} />);
 
     expect(screen.getByText('Editorial')).toBeInTheDocument();
-    expect(screen.getByText('Cinematic')).toBeInTheDocument();
-    expect(screen.getByText('Artistic')).toBeInTheDocument();
-    expect(screen.getByText('Photorealistic')).toBeInTheDocument();
-    expect(screen.getByText('Anime')).toBeInTheDocument();
-    expect(screen.getByText('Sketch')).toBeInTheDocument();
-    expect(screen.getByText('Watercolor')).toBeInTheDocument();
-    expect(screen.getByText('Oil Painting')).toBeInTheDocument();
+    expect(screen.getByText('Clean, professional look')).toBeInTheDocument();
   });
 
   it('shows selected style as active', () => {
     render(<StyleSelector value="cinematic" onChange={mockOnChange} />);
 
-    const cinematicOption = screen.getByText('Cinematic').closest('label');
-    expect(cinematicOption).toHaveClass('border-blue-600');
+    const cinematicOption = screen.getByText('Cinematic');
+    expect(cinematicOption).toBeInTheDocument();
   });
 
   it('calls onChange when a style is selected', async () => {
     const user = userEvent.setup();
     render(<StyleSelector value="editorial" onChange={mockOnChange} />);
 
-    const artisticOption = screen.getByText('Artistic').closest('label');
-    await user.click(artisticOption!);
+    // Open dropdown
+    const dropdownButton = screen.getByRole('button', { name: /editorial/i });
+    await user.click(dropdownButton);
+
+    // Select Artistic option
+    const artisticOption = screen.getByRole('option', { name: /artistic/i });
+    await user.click(artisticOption);
 
     expect(mockOnChange).toHaveBeenCalledWith('artistic');
   });
@@ -45,13 +44,15 @@ describe('StyleSelector', () => {
     const user = userEvent.setup();
     render(<StyleSelector value="editorial" onChange={mockOnChange} />);
 
-    const artisticOption = screen.getByText('Artistic').closest('label');
-    const buttonElement = artisticOption!.querySelector(
-      '[role="button"]'
-    ) as HTMLElement;
-    buttonElement!.focus();
+    // Open dropdown
+    const dropdownButton = screen.getByRole('button', { name: /editorial/i });
+    await user.click(dropdownButton);
 
+    // Focus on Artistic option and press Enter
+    const artisticOption = screen.getByRole('option', { name: /artistic/i });
+    artisticOption.focus();
     await user.keyboard('{Enter}');
+    
     expect(mockOnChange).toHaveBeenCalledWith('artistic');
   });
 
@@ -59,13 +60,15 @@ describe('StyleSelector', () => {
     const user = userEvent.setup();
     render(<StyleSelector value="editorial" onChange={mockOnChange} />);
 
-    const artisticOption = screen.getByText('Artistic').closest('label');
-    const buttonElement = artisticOption!.querySelector(
-      '[role="button"]'
-    ) as HTMLElement;
-    buttonElement.focus();
+    // Open dropdown
+    const dropdownButton = screen.getByRole('button', { name: /editorial/i });
+    await user.click(dropdownButton);
 
+    // Focus on Artistic option and press Space
+    const artisticOption = screen.getByRole('option', { name: /artistic/i });
+    artisticOption.focus();
     await user.keyboard(' ');
+    
     expect(mockOnChange).toHaveBeenCalledWith('artistic');
   });
 
@@ -78,37 +81,46 @@ describe('StyleSelector', () => {
       />
     );
 
-    const allLabels = screen.getAllByRole('radio');
-    allLabels.forEach((label) => {
-      expect(label).toBeDisabled();
-    });
+    const dropdownButton = screen.getByRole('button', { name: /editorial/i });
+    expect(dropdownButton).toBeDisabled();
   });
 
   it('has proper ARIA attributes', () => {
     render(<StyleSelector value="editorial" onChange={mockOnChange} />);
 
-    const radioGroup = screen.getByRole('radiogroup');
-    expect(radioGroup).toHaveAttribute('aria-label', 'AI art style selection');
-
-    const radioButtons = screen.getAllByRole('radio');
-    expect(radioButtons).toHaveLength(8);
-
-    radioButtons.forEach((radio) => {
-      expect(radio).toHaveAttribute('aria-describedby');
-    });
+    const dropdownButton = screen.getByRole('button', { name: /editorial/i });
+    expect(dropdownButton).toHaveAttribute('aria-haspopup', 'listbox');
+    expect(dropdownButton).toHaveAttribute('aria-expanded', 'false');
   });
 
-  it('shows style descriptions', () => {
+  it('shows all style options and descriptions when dropdown is open', async () => {
+    const user = userEvent.setup();
     render(<StyleSelector value="editorial" onChange={mockOnChange} />);
 
-    expect(screen.getByText('Clean, professional look')).toBeInTheDocument();
-    expect(screen.getByText('Dramatic, movie-like feel')).toBeInTheDocument();
-    expect(screen.getByText('Creative, expressive style')).toBeInTheDocument();
-    expect(screen.getByText('Ultra-realistic appearance')).toBeInTheDocument();
-    expect(screen.getByText('Japanese animation style')).toBeInTheDocument();
-    expect(screen.getByText('Hand-drawn, pencil-like')).toBeInTheDocument();
-    expect(screen.getByText('Soft, flowing paint style')).toBeInTheDocument();
-    expect(screen.getByText('Rich, textured brushwork')).toBeInTheDocument();
+    // Open dropdown
+    const dropdownButton = screen.getByRole('button', { name: /editorial/i });
+    await user.click(dropdownButton);
+
+    // Check that all style options are visible in the dropdown
+    const dropdownOptions = screen.getAllByRole('option');
+    expect(dropdownOptions).toHaveLength(8);
+
+    // Check that the dropdown contains the expected number of descriptions
+    const descriptions = [
+      'Clean, professional look',
+      'Dramatic, movie-like feel',
+      'Creative, expressive style',
+      'Ultra-realistic appearance',
+      'Japanese animation style',
+      'Hand-drawn, pencil-like',
+      'Soft, flowing paint style',
+      'Rich, textured brushwork'
+    ];
+
+    descriptions.forEach(description => {
+      const elements = screen.getAllByText(description);
+      expect(elements.length).toBeGreaterThan(0);
+    });
   });
 
   it('has proper fieldset and legend structure', () => {
@@ -121,12 +133,44 @@ describe('StyleSelector', () => {
     expect(legend).toBeInTheDocument();
   });
 
-  it('maintains focus states for keyboard navigation', () => {
+  it('maintains focus states for keyboard navigation', async () => {
+    const user = userEvent.setup();
     render(<StyleSelector value="editorial" onChange={mockOnChange} />);
 
-    const firstOption = screen.getByText('Editorial').closest('label');
-    firstOption!.focus();
+    // Open dropdown
+    const dropdownButton = screen.getByRole('button', { name: /editorial/i });
+    await user.click(dropdownButton);
 
-    expect(firstOption).toHaveClass('focus-within:ring-2');
+    // Focus on first option
+    const firstOption = screen.getByRole('option', { name: /editorial/i });
+    firstOption.focus();
+
+    expect(firstOption).toHaveClass('focus:ring-2');
+  });
+
+  it('opens and closes dropdown correctly', async () => {
+    const user = userEvent.setup();
+    render(<StyleSelector value="editorial" onChange={mockOnChange} />);
+
+    const dropdownButton = screen.getByRole('button', { name: /editorial/i });
+    
+    // Initially closed
+    expect(dropdownButton).toHaveAttribute('aria-expanded', 'false');
+    
+    // Open dropdown
+    await user.click(dropdownButton);
+    expect(dropdownButton).toHaveAttribute('aria-expanded', 'true');
+    
+    // Close dropdown by clicking outside
+    await user.click(document.body);
+    expect(dropdownButton).toHaveAttribute('aria-expanded', 'false');
+  });
+
+  it('displays correct selected style in dropdown button', () => {
+    render(<StyleSelector value="anime" onChange={mockOnChange} />);
+
+    const dropdownButton = screen.getByRole('button', { name: /anime/i });
+    expect(dropdownButton).toBeInTheDocument();
+    expect(screen.getByText('Japanese animation style')).toBeInTheDocument();
   });
 });

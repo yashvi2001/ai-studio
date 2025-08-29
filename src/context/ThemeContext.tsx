@@ -1,5 +1,5 @@
 import React, { useState, useEffect, ReactNode } from 'react';
-import { ThemeContext, ThemeContextType } from './theme';
+import { ThemeContext, ThemeContextType, themeColors } from './theme';
 
 interface ThemeProviderProps {
   children: ReactNode;
@@ -13,7 +13,10 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
       if (saved) {
         return saved === 'dark';
       }
-      return window.matchMedia('(prefers-color-scheme: dark)').matches;
+      if (window.matchMedia) {
+        return window.matchMedia('(prefers-color-scheme: dark)').matches;
+      }
+      return false;
     }
     return false; // Default to light mode
   });
@@ -58,6 +61,7 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
   const contextValue: ThemeContextType = {
     isDark,
     toggleTheme,
+    colors: themeColors,
   };
 
   return (
