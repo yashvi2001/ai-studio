@@ -131,7 +131,7 @@ export const ImageStudio: React.FC = () => {
   return (
     <div
       className="w-full h-full flex flex-col bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100"
-      role="main"
+      role="region"
       aria-label="AI Image Studio"
     >
       <div className="flex-1 flex flex-col xl:flex-row overflow-hidden min-h-0">
